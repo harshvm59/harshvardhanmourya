@@ -86,16 +86,7 @@
             justify-content: center;
             flex-direction: column;
             overflow: hidden;
-        }
-
-        .loader.phase-out {
-            animation: loaderExit 1s cubic-bezier(0.22, 1, 0.36, 1) 0.2s forwards;
-        }
-
-        @keyframes loaderExit {
-            0% { opacity: 1; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.15); }
-            100% { opacity: 0; transform: scale(1.3); visibility: hidden; pointer-events: none; }
+            perspective: 1000px;
         }
 
         .loader-logo {
@@ -103,68 +94,53 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            animation: netflixZoom 3.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            transform-style: preserve-3d;
         }
 
-        @keyframes netflixZoom {
-            0% { transform: scale(0.8); }
-            30% { transform: scale(1); }
-            70% { transform: scale(1); }
-            100% { transform: scale(1.05); }
+        /* Phase 1: Letters appear and settle */
+        /* Phase 2: Everything holds */
+        /* Phase 3: DRAMATIC zoom toward camera + fade (Netflix signature) */
+        .loader.phase-zoom {
+            animation: netflixFinalZoom 1.5s cubic-bezier(0.55, 0, 1, 0.45) forwards;
+        }
+
+        @keyframes netflixFinalZoom {
+            0% { opacity: 1; }
+            30% { opacity: 1; }
+            100% {
+                opacity: 0;
+                visibility: hidden;
+                pointer-events: none;
+            }
+        }
+
+        .loader.phase-zoom .loader-logo {
+            animation: logoZoomIn 1.5s cubic-bezier(0.55, 0, 1, 0.45) forwards;
+        }
+
+        @keyframes logoZoomIn {
+            0% { transform: scale(1) translateZ(0); }
+            100% { transform: scale(8) translateZ(200px); }
         }
 
         /* Cinematic ambient glow behind letters */
         .loader-glow {
             position: absolute;
-            width: 500px;
-            height: 500px;
+            width: 600px;
+            height: 600px;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(41, 151, 255, 0.25) 0%, rgba(41, 151, 255, 0.08) 30%, rgba(100, 210, 255, 0.03) 50%, transparent 70%);
+            background: radial-gradient(circle, rgba(41, 151, 255, 0.2) 0%, rgba(41, 151, 255, 0.06) 35%, transparent 65%);
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%) scale(0);
-            animation: glowBurst 2.5s cubic-bezier(0.22, 1, 0.36, 1) 0.1s forwards;
+            animation: glowBuild 2s ease-out 0.2s forwards;
             pointer-events: none;
         }
 
-        @keyframes glowBurst {
+        @keyframes glowBuild {
             0% { opacity: 0; transform: translate(-50%, -50%) scale(0); }
-            20% { opacity: 1; transform: translate(-50%, -50%) scale(0.6); }
-            50% { opacity: 0.8; transform: translate(-50%, -50%) scale(1); }
-            100% { opacity: 0.4; transform: translate(-50%, -50%) scale(1.5); }
-        }
-
-        /* Vertical light bars behind text (Netflix-style) */
-        .loader-bars {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 200%;
-            height: 200%;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .loader-bars span {
-            position: absolute;
-            top: 0;
-            width: 3px;
-            height: 100%;
-            background: linear-gradient(180deg, transparent, rgba(41, 151, 255, 0.4), rgba(255,255,255,0.1), transparent);
-            opacity: 0;
-            animation: barFlash 0.5s ease-out forwards;
-        }
-
-        .loader-bars span:nth-child(1) { left: 30%; animation-delay: 0.4s; }
-        .loader-bars span:nth-child(2) { left: 45%; animation-delay: 0.55s; }
-        .loader-bars span:nth-child(3) { left: 55%; animation-delay: 0.65s; }
-        .loader-bars span:nth-child(4) { left: 70%; animation-delay: 0.75s; }
-
-        @keyframes barFlash {
-            0% { opacity: 0; transform: scaleY(0); }
-            30% { opacity: 0.6; transform: scaleY(1); }
-            100% { opacity: 0; transform: scaleY(1); }
+            40% { opacity: 1; transform: translate(-50%, -50%) scale(0.8); }
+            100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1.3); }
         }
 
         .loader-text {
@@ -176,102 +152,89 @@
             position: relative;
             overflow: visible;
             z-index: 2;
+            transform-style: preserve-3d;
         }
 
-        /* Netflix-style: letters start HUGE and zoomed, slam into place */
+        /* Each letter: start invisible, fade in with 3D long-shadow depth effect */
         .loader-text span {
             display: inline-block;
             opacity: 0;
-            transform: translateY(100px) scale(2) rotateX(40deg);
-            filter: blur(20px);
-            animation: netflixSlam 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-            transform-origin: center bottom;
-            text-shadow: 0 0 40px rgba(41, 151, 255, 0.5), 0 0 80px rgba(41, 151, 255, 0.2);
+            animation: letterReveal 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            text-shadow:
+                0 1px 0 rgba(255,255,255,0.1),
+                0 2px 4px rgba(0,0,0,0.3),
+                0 4px 8px rgba(0,0,0,0.2),
+                0 8px 16px rgba(0,0,0,0.15),
+                0 0 40px rgba(41, 151, 255, 0.3),
+                0 0 80px rgba(41, 151, 255, 0.15);
         }
 
-        .loader-text span:nth-child(1) { animation-delay: 0.2s; }
-        .loader-text span:nth-child(2) { animation-delay: 0.45s; }
-        .loader-text span:nth-child(3) { animation-delay: 0.7s; }
+        .loader-text span:nth-child(1) { animation-delay: 0.3s; }
+        .loader-text span:nth-child(2) { animation-delay: 0.6s; }
+        .loader-text span:nth-child(3) { animation-delay: 0.9s; }
 
-        @keyframes netflixSlam {
+        @keyframes letterReveal {
             0% {
                 opacity: 0;
-                transform: translateY(100px) scale(2) rotateX(40deg);
-                filter: blur(20px);
-                text-shadow: 0 0 80px rgba(41, 151, 255, 0.8);
+                transform: scale(0.3) translateY(40px);
+                filter: blur(15px) brightness(3);
             }
-            40% {
+            30% {
                 opacity: 1;
-                filter: blur(4px);
-                text-shadow: 0 0 60px rgba(41, 151, 255, 0.6);
+                filter: blur(3px) brightness(1.5);
             }
-            70% {
-                transform: translateY(-5px) scale(1) rotateX(0deg);
-                filter: blur(0);
+            60% {
+                transform: scale(1.05) translateY(-3px);
+                filter: blur(0) brightness(1.1);
             }
-            85% {
-                transform: translateY(2px) scale(1) rotateX(0deg);
+            80% {
+                transform: scale(0.98) translateY(1px);
             }
             100% {
                 opacity: 1;
-                transform: translateY(0) scale(1) rotateX(0deg);
-                filter: blur(0);
-                text-shadow: 0 0 30px rgba(41, 151, 255, 0.3), 0 0 60px rgba(41, 151, 255, 0.1);
+                transform: scale(1) translateY(0);
+                filter: blur(0) brightness(1);
             }
         }
 
-        /* Cinematic horizontal light sweep across letters */
+        /* Light sweep across all letters after they've appeared */
         .loader-text::after {
             content: '';
             position: absolute;
-            top: -20%;
-            left: -120%;
-            width: 80%;
-            height: 140%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), rgba(255,255,255,0.2), rgba(255,255,255,0.3), rgba(255,255,255,0.2), rgba(255,255,255,0.05), transparent);
+            top: -30%;
+            left: -150%;
+            width: 50%;
+            height: 160%;
+            background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.03) 20%, rgba(255,255,255,0.15) 45%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0.15) 55%, rgba(255,255,255,0.03) 80%, transparent 100%);
             transform: skewX(-20deg);
-            animation: cinematicSweep 1s ease-in-out 1.6s forwards;
+            animation: shimmer 1.2s ease-in-out 2s forwards;
             opacity: 0;
             z-index: 3;
             pointer-events: none;
         }
 
-        @keyframes cinematicSweep {
-            0% { left: -120%; opacity: 1; }
-            100% { left: 150%; opacity: 0.8; }
+        @keyframes shimmer {
+            0% { left: -150%; opacity: 1; }
+            100% { left: 200%; opacity: 0.6; }
         }
 
-        /* Horizontal divider line below text */
-        .loader-line {
-            width: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
-            margin-top: 16px;
-            animation: lineExpand 0.8s cubic-bezier(0.22, 1, 0.36, 1) 1.6s forwards;
-            z-index: 2;
-        }
-
-        @keyframes lineExpand {
-            to { width: clamp(100px, 25vw, 200px); }
-        }
-
-        /* Tagline with cinematic reveal */
+        /* Tagline */
         .loader-sub {
             font-family: var(--font-body);
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             font-weight: 400;
-            letter-spacing: 12px;
+            letter-spacing: 14px;
             text-transform: uppercase;
-            color: rgba(255, 255, 255, 0.5);
-            margin-top: 20px;
+            color: rgba(255, 255, 255, 0.4);
+            margin-top: 24px;
             opacity: 0;
             z-index: 2;
-            animation: taglineReveal 1s cubic-bezier(0.22, 1, 0.36, 1) 2s forwards;
+            animation: subReveal 0.8s ease 2.2s forwards;
         }
 
-        @keyframes taglineReveal {
-            0% { opacity: 0; letter-spacing: 16px; transform: translateY(10px); }
-            100% { opacity: 1; letter-spacing: 6px; transform: translateY(0); }
+        @keyframes subReveal {
+            0% { opacity: 0; letter-spacing: 18px; }
+            100% { opacity: 0.7; letter-spacing: 6px; }
         }
 
         /* ============================================
@@ -1708,11 +1671,9 @@
     <div class="loader" id="loader">
         <div class="loader-logo">
             <div class="loader-glow"></div>
-            <div class="loader-bars"><span></span><span></span><span></span><span></span></div>
             <div class="loader-text">
                 <span>H</span><span>V</span><span>M</span>
             </div>
-            <div class="loader-line"></div>
             <div class="loader-sub">Builder &middot; Operator &middot; Hustler</div>
         </div>
     </div>
@@ -2308,12 +2269,15 @@
         // ========================================
         const loader = document.getElementById('loader');
         window.addEventListener('load', () => {
+            // Phase 1 (0-2s): Letters reveal one by one with glow
+            // Phase 2 (2-3s): Hold + shimmer sweep
+            // Phase 3 (3s): Netflix signature zoom INTO camera + fade
             setTimeout(() => {
-                loader.classList.add('phase-out');
+                loader.classList.add('phase-zoom');
                 document.body.classList.add('loaded');
                 initHeroLetters();
-            }, 3200);
-            setTimeout(() => loader.remove(), 4500);
+            }, 3500);
+            setTimeout(() => loader.remove(), 5200);
         });
 
         // ========================================
