@@ -940,6 +940,13 @@
             line-height: 1.7;
         }
 
+        .project-metric {
+            font-family: var(--font-heading);
+            font-size: 1.4rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
         .project-link {
             display: inline-flex;
             align-items: center;
@@ -1939,109 +1946,44 @@
     <section id="sidehustles">
         <div class="container">
             <div class="reveal">
-                <div class="section-label">Side Hustles & Passions</div>
-                <h2 class="section-title">Growth, visualized.</h2>
-                <p class="section-desc">Because building just one thing at a time was never my style. Here's how the side quests are trending.</p>
+                <div class="section-label">Side Hustles &amp; Passions</div>
+                <h2 class="section-title">The stuff I do for fun (that also makes money).</h2>
+                <p class="section-desc">Because building just one thing at a time was never my style.</p>
             </div>
-            <div class="growth-graph reveal" id="growthGraph">
-                <div class="graph-legend">
-                    <div class="legend-item">
-                        <span class="legend-dot" style="background: #2997ff;"></span>
-                        <span class="legend-label">Airbnb MRR</span>
-                    </div>
-                    <div class="legend-item">
-                        <span class="legend-dot" style="background: #34c759;"></span>
-                        <span class="legend-label">Investment Portfolio</span>
-                    </div>
-                    <div class="legend-item">
-                        <span class="legend-dot" style="background: #ff9f0a;"></span>
-                        <span class="legend-label">AI Tools</span>
+            <div class="projects-grid">
+                <div class="project-card tilt-card reveal">
+                    <div class="tilt-shine"></div>
+                    <div class="project-icon" style="background:rgba(255,255,255,0.06);">&#127968;</div>
+                    <h3>Airbnb Operator</h3>
+                    <div class="project-metric" style="color:#2997ff;">$2,000/mo MRR</div>
+                    <p>Running an Airbnb property generating $2,000 monthly recurring revenue. From listing optimization to guest experience &mdash; built the entire operation from scratch. Passive income, active learning.</p>
+                    <div class="timeline-tags" style="margin-top:16px;">
+                        <span class="timeline-tag">$2K Monthly RR</span>
+                        <span class="timeline-tag">Hospitality</span>
                     </div>
                 </div>
-                <div class="graph-container">
-                    <svg viewBox="0 0 800 400" class="graph-svg" id="graphSvg" preserveAspectRatio="xMidYMid meet">
-                        <!-- Grid lines -->
-                        <line x1="80" y1="40" x2="80" y2="340" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
-                        <line x1="80" y1="340" x2="760" y2="340" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
-                        <line x1="80" y1="265" x2="760" y2="265" stroke="rgba(255,255,255,0.04)" stroke-width="1" stroke-dasharray="4,6"/>
-                        <line x1="80" y1="190" x2="760" y2="190" stroke="rgba(255,255,255,0.04)" stroke-width="1" stroke-dasharray="4,6"/>
-                        <line x1="80" y1="115" x2="760" y2="115" stroke="rgba(255,255,255,0.04)" stroke-width="1" stroke-dasharray="4,6"/>
-                        <line x1="80" y1="40" x2="760" y2="40" stroke="rgba(255,255,255,0.04)" stroke-width="1" stroke-dasharray="4,6"/>
-
-                        <!-- Y-axis labels -->
-                        <text x="70" y="344" text-anchor="end" fill="rgba(255,255,255,0.3)" font-size="11" font-family="Inter, sans-serif">$0</text>
-                        <text x="70" y="269" text-anchor="end" fill="rgba(255,255,255,0.3)" font-size="11" font-family="Inter, sans-serif">$500</text>
-                        <text x="70" y="194" text-anchor="end" fill="rgba(255,255,255,0.3)" font-size="11" font-family="Inter, sans-serif">$1K</text>
-                        <text x="70" y="119" text-anchor="end" fill="rgba(255,255,255,0.3)" font-size="11" font-family="Inter, sans-serif">$1.5K</text>
-                        <text x="70" y="44" text-anchor="end" fill="rgba(255,255,255,0.3)" font-size="11" font-family="Inter, sans-serif">$2K</text>
-
-                        <!-- X-axis labels -->
-                        <text x="125" y="365" text-anchor="middle" fill="rgba(255,255,255,0.3)" font-size="11" font-family="Inter, sans-serif">2023</text>
-                        <text x="305" y="365" text-anchor="middle" fill="rgba(255,255,255,0.3)" font-size="11" font-family="Inter, sans-serif">2024 Q1</text>
-                        <text x="485" y="365" text-anchor="middle" fill="rgba(255,255,255,0.3)" font-size="11" font-family="Inter, sans-serif">2024 Q3</text>
-                        <text x="670" y="365" text-anchor="middle" fill="rgba(255,255,255,0.3)" font-size="11" font-family="Inter, sans-serif">2025</text>
-
-                        <!-- Gradient fills under lines -->
-                        <defs>
-                            <linearGradient id="gradAirbnb" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="0%" stop-color="#2997ff" stop-opacity="0.2"/>
-                                <stop offset="100%" stop-color="#2997ff" stop-opacity="0"/>
-                            </linearGradient>
-                            <linearGradient id="gradPortfolio" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="0%" stop-color="#34c759" stop-opacity="0.15"/>
-                                <stop offset="100%" stop-color="#34c759" stop-opacity="0"/>
-                            </linearGradient>
-                            <linearGradient id="gradAI" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="0%" stop-color="#ff9f0a" stop-opacity="0.15"/>
-                                <stop offset="100%" stop-color="#ff9f0a" stop-opacity="0"/>
-                            </linearGradient>
-                        </defs>
-
-                        <!-- Area fills -->
-                        <path class="graph-area" d="M125,340 L215,310 L305,280 L395,230 L485,180 L580,120 L670,60 L760,40 L760,340 Z" fill="url(#gradAirbnb)" opacity="0"/>
-                        <path class="graph-area" d="M125,340 L215,330 L305,310 L395,280 L485,240 L580,190 L670,150 L760,100 L760,340 Z" fill="url(#gradPortfolio)" opacity="0"/>
-                        <path class="graph-area" d="M485,340 L580,300 L670,250 L760,200 L760,340 Z" fill="url(#gradAI)" opacity="0"/>
-
-                        <!-- Lines -->
-                        <polyline class="graph-line" id="lineAirbnb"
-                            points="125,340 215,310 305,280 395,230 485,180 580,120 670,60 760,40"
-                            fill="none" stroke="#2997ff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        <polyline class="graph-line" id="linePortfolio"
-                            points="125,340 215,330 305,310 395,280 485,240 580,190 670,150 760,100"
-                            fill="none" stroke="#34c759" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        <polyline class="graph-line" id="lineAI"
-                            points="485,340 580,300 670,250 760,200"
-                            fill="none" stroke="#ff9f0a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-
-                        <!-- Endpoint dots -->
-                        <circle class="graph-dot" cx="760" cy="40" r="5" fill="#2997ff" opacity="0"/>
-                        <circle class="graph-dot" cx="760" cy="100" r="5" fill="#34c759" opacity="0"/>
-                        <circle class="graph-dot" cx="760" cy="200" r="5" fill="#ff9f0a" opacity="0"/>
-
-                        <!-- Endpoint labels -->
-                        <text class="graph-endpoint" x="755" y="30" text-anchor="end" fill="#2997ff" font-size="13" font-weight="700" font-family="Space Grotesk, sans-serif" opacity="0">$2K/mo</text>
-                        <text class="graph-endpoint" x="755" y="92" text-anchor="end" fill="#34c759" font-size="13" font-weight="700" font-family="Space Grotesk, sans-serif" opacity="0">$150K AUM</text>
-                        <text class="graph-endpoint" x="755" y="192" text-anchor="end" fill="#ff9f0a" font-size="13" font-weight="700" font-family="Space Grotesk, sans-serif" opacity="0">Building...</text>
-                    </svg>
+                <div class="project-card tilt-card reveal">
+                    <div class="tilt-shine"></div>
+                    <div class="project-icon" style="background:rgba(255,255,255,0.06);">&#128200;</div>
+                    <h3>$150K Global Portfolio</h3>
+                    <div class="project-metric" style="color:#34c759;">$150K AUM</div>
+                    <p>Built a $150K global investment portfolio entirely through my own research. No advisors, no shortcuts &mdash; pure independent analysis and conviction-based investing across markets.</p>
+                    <div class="timeline-tags" style="margin-top:16px;">
+                        <span class="timeline-tag">$150K AUM</span>
+                        <span class="timeline-tag">Self-Researched</span>
+                        <span class="timeline-tag">Global Markets</span>
+                    </div>
                 </div>
-                <div class="graph-cards">
-                    <div class="graph-card">
-                        <div class="graph-card-icon">&#127968;</div>
-                        <div class="graph-card-title">Airbnb Operator</div>
-                        <div class="graph-card-value" style="color:#2997ff;">$2,000/mo MRR</div>
-                        <div class="graph-card-desc">Listing optimization to guest experience &mdash; built from scratch.</div>
-                    </div>
-                    <div class="graph-card">
-                        <div class="graph-card-icon">&#128200;</div>
-                        <div class="graph-card-title">Global Portfolio</div>
-                        <div class="graph-card-value" style="color:#34c759;">$150K AUM</div>
-                        <div class="graph-card-desc">Self-researched, conviction-based investing across global markets.</div>
-                    </div>
-                    <div class="graph-card">
-                        <div class="graph-card-icon">&#129302;</div>
-                        <div class="graph-card-title">AI Tools</div>
-                        <div class="graph-card-value" style="color:#ff9f0a;">In Progress</div>
-                        <div class="graph-card-desc">Building &amp; shipping AI tools. From zero to one, any domain.</div>
+                <div class="project-card tilt-card reveal">
+                    <div class="tilt-shine"></div>
+                    <div class="project-icon" style="background:rgba(255,255,255,0.06);">&#129302;</div>
+                    <h3>AI Tools Builder</h3>
+                    <div class="project-metric" style="color:#ff9f0a;">In Progress</div>
+                    <p>Currently building and shipping AI tools. On a mission to become a true generalist &mdash; someone who can take an idea from zero to one, regardless of the domain. The future belongs to builders.</p>
+                    <div class="timeline-tags" style="margin-top:16px;">
+                        <span class="timeline-tag">AI / LLMs</span>
+                        <span class="timeline-tag">Generalist Builder</span>
+                        <span class="timeline-tag">0 &rarr; 1</span>
                     </div>
                 </div>
             </div>
@@ -2765,7 +2707,7 @@
                     const dot = document.createElement('button');
                     dot.className = 'testimonial-dot' + (i === 0 ? ' active' : '');
                     dot.setAttribute('aria-label', 'Go to slide ' + (i + 1));
-                    dot.addEventListener('click', () => goToSlide(i));
+                    dot.addEventListener('click', () => { stopAutoplay(); goToSlide(i); startAutoplay(); });
                     testimonialDots.appendChild(dot);
                 }
             }
@@ -2773,8 +2715,9 @@
             function goToSlide(index) {
                 const pages = getTotalPages();
                 currentSlide = Math.max(0, Math.min(index, pages - 1));
-                // Each slide is 50% on desktop, 100% on mobile
-                const offset = currentSlide * slidesPerView() * (100 / slides.length);
+                const perView = slidesPerView();
+                const slideW = 100 / perView;
+                const offset = currentSlide * perView * slideW;
                 testimonialTrack.style.transform = 'translateX(-' + offset + '%)';
                 const dots = testimonialDots.querySelectorAll('.testimonial-dot');
                 dots.forEach((d, i) => d.classList.toggle('active', i === currentSlide));
@@ -2794,10 +2737,10 @@
                 if (carouselTimer) clearInterval(carouselTimer);
             }
 
-            // Set slide widths
             function updateSlideWidths() {
-                const w = isMobileView() ? '100%' : '50%';
-                slides.forEach(s => s.style.minWidth = w);
+                const perView = slidesPerView();
+                const w = (100 / perView) + '%';
+                slides.forEach(s => { s.style.minWidth = w; s.style.maxWidth = w; });
                 buildDots();
                 goToSlide(0);
             }
@@ -2805,7 +2748,6 @@
             updateSlideWidths();
             window.addEventListener('resize', updateSlideWidths);
 
-            // Auto-play when visible
             const carouselObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
