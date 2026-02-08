@@ -389,11 +389,29 @@
            ============================================ */
         .hero {
             min-height: auto;
-            padding: 160px 0 80px;
+            padding: 180px 0 100px;
             display: flex;
             align-items: center;
             position: relative;
             overflow: hidden;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 30%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 600px;
+            background: radial-gradient(ellipse, rgba(41, 151, 255, 0.04) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .hero .container {
+            max-width: 1400px;
+            padding: 0 80px;
         }
 
         #particles-canvas {
@@ -415,20 +433,25 @@
         .hero-content {
             position: relative;
             z-index: 2;
-            max-width: 800px;
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
         }
 
         .hero-badge {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            padding: 8px 16px;
-            background: rgba(255, 255, 255, 0.05);
+            padding: 8px 20px;
+            background: rgba(255, 255, 255, 0.04);
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 100px;
-            font-size: 0.85rem;
+            font-size: 0.72rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
             color: var(--text-secondary);
-            margin-bottom: 24px;
+            margin-bottom: 32px;
             opacity: 0;
             transform: translateY(20px);
         }
@@ -452,11 +475,11 @@
 
         .hero h1 {
             font-family: var(--font-heading);
-            font-size: clamp(3rem, 7vw, 5.5rem);
+            font-size: clamp(3.5rem, 9vw, 7rem);
             font-weight: 900;
-            line-height: 1.05;
-            letter-spacing: -2px;
-            margin-bottom: 8px;
+            line-height: 0.95;
+            letter-spacing: -4px;
+            margin-bottom: 16px;
             position: relative;
         }
 
@@ -566,10 +589,12 @@
         }
 
         .hero-tagline {
-            font-size: clamp(1rem, 2vw, 1.2rem);
+            font-size: clamp(1rem, 2vw, 1.15rem);
             color: var(--text-muted);
-            margin-bottom: 40px;
-            max-width: 600px;
+            margin-bottom: 48px;
+            max-width: 640px;
+            margin-left: auto;
+            margin-right: auto;
             opacity: 0;
             transform: translateY(20px);
         }
@@ -582,6 +607,7 @@
             display: flex;
             gap: 16px;
             flex-wrap: wrap;
+            justify-content: center;
             margin-bottom: 48px;
             opacity: 0;
             transform: translateY(20px);
@@ -633,12 +659,31 @@
         .hero-socials {
             display: flex;
             gap: 16px;
+            justify-content: center;
             opacity: 0;
             transform: translateY(20px);
         }
 
         .loaded .hero-socials {
             animation: fadeUp 0.8s ease forwards 1.4s;
+        }
+
+        .hero-accent {
+            width: 60px;
+            height: 2px;
+            background: var(--gradient-1);
+            margin: 20px auto 24px;
+            opacity: 0;
+            transform: scaleX(0);
+            transform-origin: center;
+        }
+
+        .loaded .hero-accent {
+            animation: accentReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards 0.7s;
+        }
+
+        @keyframes accentReveal {
+            to { opacity: 1; transform: scaleX(1); }
         }
 
         .social-icon {
@@ -1529,23 +1574,40 @@
 
             .container { padding: 0 20px; }
 
+            /* Loader — fix overflow on mobile */
+            .loader-text { letter-spacing: -4px; }
+            .loader-sub {
+                letter-spacing: 6px;
+                font-size: 0.65rem;
+                margin-top: 16px;
+                padding: 0 16px;
+                text-align: center;
+            }
+            @keyframes subReveal {
+                0% { opacity: 0; letter-spacing: 10px; }
+                100% { opacity: 0.7; letter-spacing: 4px; }
+            }
+
             /* Hero — compact for mobile */
             .hero {
                 min-height: auto;
-                padding: 100px 0 60px;
+                padding: 120px 0 60px;
             }
+            .hero .container { padding: 0 20px; }
+            .hero-content { max-width: 100%; }
             .hero h1 {
-                font-size: clamp(2.2rem, 9vw, 3.5rem);
-                letter-spacing: -1px;
-                margin-bottom: 4px;
+                font-size: clamp(2.5rem, 10vw, 4rem);
+                letter-spacing: -2px;
+                margin-bottom: 8px;
             }
             .hero-typing { font-size: 0.95rem; margin-bottom: 16px; }
             .hero-tagline {
                 font-size: 0.9rem;
-                margin-bottom: 24px;
+                margin-bottom: 28px;
                 line-height: 1.6;
             }
-            .hero-badge { font-size: 0.75rem; padding: 6px 12px; margin-bottom: 16px; }
+            .hero-badge { font-size: 0.65rem; padding: 6px 14px; margin-bottom: 20px; letter-spacing: 0.5px; }
+            .hero-accent { margin: 12px auto 16px; width: 40px; }
             .hero-cta { flex-direction: column; gap: 10px; margin-bottom: 32px; }
             .btn { justify-content: center; padding: 12px 24px; font-size: 0.9rem; }
             .hero-socials { gap: 12px; }
@@ -1732,6 +1794,7 @@
                     <div class="glitch-layer glitch-layer-2" aria-hidden="true">MOURYA</div>
                 </div>
             </h1>
+            <div class="hero-accent"></div>
             <div class="hero-typing">
                 <span id="typed-text"></span><span class="cursor"></span>
             </div>
