@@ -1081,6 +1081,11 @@
             color: var(--text-primary);
         }
 
+        .carousel-wrapper {
+            position: relative;
+            padding: 0 56px;
+        }
+
         .testimonial-carousel {
             position: relative;
             overflow: hidden;
@@ -2186,13 +2191,14 @@
                     View on Topmate &rarr;
                 </a>
             </div>
-            <div class="testimonial-carousel reveal" id="testimonialCarousel">
+            <div class="carousel-wrapper reveal" id="testimonialCarousel">
                 <button class="carousel-nav carousel-prev" id="carouselPrev" aria-label="Previous testimonials">
                     <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
                 </button>
                 <button class="carousel-nav carousel-next" id="carouselNext" aria-label="Next testimonials">
                     <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
                 </button>
+                <div class="testimonial-carousel">
                 <div class="testimonial-track" id="testimonialTrack">
                     <div class="testimonial-slide">
                         <div class="testimonial-card">
@@ -2248,6 +2254,7 @@
                             <div class="testimonial-role">Topmate &middot; 2025</div>
                         </div>
                     </div>
+                </div>
                 </div>
                 <div class="testimonial-dots" id="testimonialDots"></div>
             </div>
