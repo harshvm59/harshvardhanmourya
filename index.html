@@ -2,9 +2,56 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <!-- Google Analytics 4 — Replace G-XXXXXXXXXX with your Measurement ID -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-XXXXXXXXXX');
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Harsh Vardhan Mourya — Builder. Operator. Problem Solver.</title>
     <meta name="description" content="Senior Program Manager at Zomato. I'm obsessed with solving real problems — the kind that create impact at scale.">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Harsh Vardhan Mourya — Builder. Operator. Problem Solver.">
+    <meta property="og:description" content="Senior Program Manager at Zomato. 7K+ jobs created, 6 promotions, $2K/mo side hustle.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://harshvm59.github.io/harshvardhanmourya/">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Harsh Vardhan Mourya — Builder. Operator. Problem Solver.">
+    <meta name="twitter:description" content="Senior Program Manager at Zomato. 7K+ jobs created, 6 promotions, $2K/mo side hustle.">
+
+    <!-- Canonical & Author -->
+    <link rel="canonical" href="https://harshvm59.github.io/harshvardhanmourya/">
+    <meta name="author" content="Harsh Vardhan Mourya">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>H</text></svg>">
+
+    <!-- Schema.org Person -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Harsh Vardhan Mourya",
+        "url": "https://harshvm59.github.io/harshvardhanmourya/",
+        "jobTitle": "Senior Program Manager",
+        "worksFor": { "@type": "Organization", "name": "Zomato" },
+        "alumniOf": { "@type": "CollegeOrUniversity", "name": "NIT Raipur" },
+        "sameAs": [
+            "https://www.linkedin.com/in/harshnitrr/",
+            "https://www.youtube.com/watch?v=UFaBV3RHCLA",
+            "https://www.instagram.com/vardhan_harsh_96/",
+            "https://topmate.io/k_harsh_vardhan/"
+        ]
+    }
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -1588,6 +1635,39 @@
             background: var(--bg-primary);
         }
 
+        /* Hero Metrics Strip */
+        .hero-metrics {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 40px;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .loaded .hero-metrics {
+            animation: fadeUp 0.8s ease forwards 1.1s;
+        }
+
+        .hero-metric {
+            text-align: center;
+        }
+
+        .hero-metric-value {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1.2;
+        }
+
+        .hero-metric-label {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+            letter-spacing: 0.5px;
+        }
+
         .connect {
             background: var(--bg-secondary);
         }
@@ -1651,6 +1731,9 @@
             }
             .hero-badge { font-size: 0.65rem; padding: 6px 14px; margin-bottom: 20px; letter-spacing: 0.5px; }
             .hero-accent { margin: 12px auto 16px; width: 40px; }
+            .hero-metrics { gap: 24px; margin-bottom: 28px; }
+            .hero-metric-value { font-size: 1.2rem; }
+            .hero-metric-label { font-size: 0.65rem; }
             .hero-cta { flex-direction: column; gap: 10px; margin-bottom: 32px; }
             .btn { justify-content: center; padding: 12px 24px; font-size: 0.9rem; }
             .hero-socials { gap: 12px; }
@@ -1844,6 +1927,20 @@
             <p class="hero-tagline">
                 I'm obsessed with solving real problems &mdash; the kind that create impact at scale. From racing cars to scaling businesses, I don't do things half-assed.
             </p>
+            <div class="hero-metrics">
+                <div class="hero-metric">
+                    <div class="hero-metric-value">7K+</div>
+                    <div class="hero-metric-label">Jobs Created</div>
+                </div>
+                <div class="hero-metric">
+                    <div class="hero-metric-value">4.97</div>
+                    <div class="hero-metric-label">Topmate Rating</div>
+                </div>
+                <div class="hero-metric">
+                    <div class="hero-metric-value">$2K/mo</div>
+                    <div class="hero-metric-label">Side Hustle</div>
+                </div>
+            </div>
             <div class="hero-cta">
                 <a href="#experience" class="btn btn-primary magnetic">
                     See My Journey
@@ -2898,6 +2995,47 @@
                 }
             });
         });
+
+        // ========================================
+        // 18. GA4 EVENT TRACKING
+        // ========================================
+        function trackEvent(name, params) {
+            if (typeof gtag === 'function') gtag('event', name, params);
+        }
+
+        // CTA clicks (hero + connect)
+        document.querySelectorAll('.hero-cta .btn, .connect-cta .btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                trackEvent('cta_click', { event_label: this.textContent.trim(), link_url: this.href });
+            });
+        });
+
+        // Social icon clicks
+        document.querySelectorAll('.social-icon, .connect-social-link').forEach(link => {
+            link.addEventListener('click', function() {
+                trackEvent('social_click', { event_label: this.getAttribute('aria-label') || this.textContent.trim(), link_url: this.href });
+            });
+        });
+
+        // All outbound links
+        document.querySelectorAll('a[target="_blank"]').forEach(link => {
+            link.addEventListener('click', function() {
+                trackEvent('outbound_click', { event_label: this.href });
+            });
+        });
+
+        // Scroll depth milestones
+        (function() {
+            var hit = {};
+            window.addEventListener('scroll', function() {
+                var h = document.documentElement.scrollHeight - window.innerHeight;
+                if (h <= 0) return;
+                var pct = Math.round((window.scrollY / h) * 100);
+                [25, 50, 75, 100].forEach(function(m) {
+                    if (pct >= m && !hit[m]) { hit[m] = true; trackEvent('scroll_depth', { event_label: m + '%', value: m }); }
+                });
+            });
+        })();
 
     })();
     </script>
