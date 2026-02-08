@@ -74,28 +74,28 @@
         }
 
         /* ============================================
-           LOADING SCREEN — Dashing HVM Logo
+           LOADING SCREEN — Netflix-Style HVM
            ============================================ */
         .loader {
             position: fixed;
             inset: 0;
             z-index: 10000;
-            background: var(--bg-primary);
+            background: #000000;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-direction: column;
-            gap: 0;
+            overflow: hidden;
         }
 
         .loader.phase-out {
-            animation: loaderExit 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.3s forwards;
+            animation: loaderExit 1s cubic-bezier(0.22, 1, 0.36, 1) 0.2s forwards;
         }
 
         @keyframes loaderExit {
             0% { opacity: 1; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.05); }
-            100% { opacity: 0; transform: scale(1.1); visibility: hidden; pointer-events: none; }
+            50% { opacity: 1; transform: scale(1.15); }
+            100% { opacity: 0; transform: scale(1.3); visibility: hidden; pointer-events: none; }
         }
 
         .loader-logo {
@@ -103,64 +103,175 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            animation: netflixZoom 3.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        @keyframes netflixZoom {
+            0% { transform: scale(0.8); }
+            30% { transform: scale(1); }
+            70% { transform: scale(1); }
+            100% { transform: scale(1.05); }
+        }
+
+        /* Cinematic ambient glow behind letters */
+        .loader-glow {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(41, 151, 255, 0.25) 0%, rgba(41, 151, 255, 0.08) 30%, rgba(100, 210, 255, 0.03) 50%, transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            animation: glowBurst 2.5s cubic-bezier(0.22, 1, 0.36, 1) 0.1s forwards;
+            pointer-events: none;
+        }
+
+        @keyframes glowBurst {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0); }
+            20% { opacity: 1; transform: translate(-50%, -50%) scale(0.6); }
+            50% { opacity: 0.8; transform: translate(-50%, -50%) scale(1); }
+            100% { opacity: 0.4; transform: translate(-50%, -50%) scale(1.5); }
+        }
+
+        /* Vertical light bars behind text (Netflix-style) */
+        .loader-bars {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200%;
+            height: 200%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .loader-bars span {
+            position: absolute;
+            top: 0;
+            width: 3px;
+            height: 100%;
+            background: linear-gradient(180deg, transparent, rgba(41, 151, 255, 0.4), rgba(255,255,255,0.1), transparent);
+            opacity: 0;
+            animation: barFlash 0.5s ease-out forwards;
+        }
+
+        .loader-bars span:nth-child(1) { left: 30%; animation-delay: 0.4s; }
+        .loader-bars span:nth-child(2) { left: 45%; animation-delay: 0.55s; }
+        .loader-bars span:nth-child(3) { left: 55%; animation-delay: 0.65s; }
+        .loader-bars span:nth-child(4) { left: 70%; animation-delay: 0.75s; }
+
+        @keyframes barFlash {
+            0% { opacity: 0; transform: scaleY(0); }
+            30% { opacity: 0.6; transform: scaleY(1); }
+            100% { opacity: 0; transform: scaleY(1); }
         }
 
         .loader-text {
             font-family: var(--font-heading);
-            font-size: clamp(4rem, 15vw, 9rem);
+            font-size: clamp(6rem, 22vw, 14rem);
             font-weight: 900;
-            letter-spacing: -4px;
+            letter-spacing: -8px;
             color: #ffffff;
             position: relative;
-            overflow: hidden;
+            overflow: visible;
+            z-index: 2;
         }
 
+        /* Netflix-style: letters start HUGE and zoomed, slam into place */
         .loader-text span {
             display: inline-block;
             opacity: 0;
-            transform: translateY(110%);
-            animation: loaderSlideUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            transform: translateY(100px) scale(2) rotateX(40deg);
+            filter: blur(20px);
+            animation: netflixSlam 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            transform-origin: center bottom;
+            text-shadow: 0 0 40px rgba(41, 151, 255, 0.5), 0 0 80px rgba(41, 151, 255, 0.2);
         }
 
-        .loader-text span:nth-child(1) { animation-delay: 0.15s; }
-        .loader-text span:nth-child(2) { animation-delay: 0.3s; }
-        .loader-text span:nth-child(3) { animation-delay: 0.45s; }
+        .loader-text span:nth-child(1) { animation-delay: 0.2s; }
+        .loader-text span:nth-child(2) { animation-delay: 0.45s; }
+        .loader-text span:nth-child(3) { animation-delay: 0.7s; }
 
-        @keyframes loaderSlideUp {
-            to {
+        @keyframes netflixSlam {
+            0% {
+                opacity: 0;
+                transform: translateY(100px) scale(2) rotateX(40deg);
+                filter: blur(20px);
+                text-shadow: 0 0 80px rgba(41, 151, 255, 0.8);
+            }
+            40% {
                 opacity: 1;
-                transform: translateY(0);
+                filter: blur(4px);
+                text-shadow: 0 0 60px rgba(41, 151, 255, 0.6);
+            }
+            70% {
+                transform: translateY(-5px) scale(1) rotateX(0deg);
+                filter: blur(0);
+            }
+            85% {
+                transform: translateY(2px) scale(1) rotateX(0deg);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1) rotateX(0deg);
+                filter: blur(0);
+                text-shadow: 0 0 30px rgba(41, 151, 255, 0.3), 0 0 60px rgba(41, 151, 255, 0.1);
             }
         }
 
-        /* Horizontal dash line that wipes across */
+        /* Cinematic horizontal light sweep across letters */
+        .loader-text::after {
+            content: '';
+            position: absolute;
+            top: -20%;
+            left: -120%;
+            width: 80%;
+            height: 140%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), rgba(255,255,255,0.2), rgba(255,255,255,0.3), rgba(255,255,255,0.2), rgba(255,255,255,0.05), transparent);
+            transform: skewX(-20deg);
+            animation: cinematicSweep 1s ease-in-out 1.6s forwards;
+            opacity: 0;
+            z-index: 3;
+            pointer-events: none;
+        }
+
+        @keyframes cinematicSweep {
+            0% { left: -120%; opacity: 1; }
+            100% { left: 150%; opacity: 0.8; }
+        }
+
+        /* Horizontal divider line below text */
         .loader-line {
             width: 0;
-            height: 2px;
-            background: #ffffff;
-            margin-top: 12px;
-            animation: loaderLineWipe 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.7s forwards;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+            margin-top: 16px;
+            animation: lineExpand 0.8s cubic-bezier(0.22, 1, 0.36, 1) 1.6s forwards;
+            z-index: 2;
         }
 
-        @keyframes loaderLineWipe {
-            to { width: clamp(80px, 20vw, 160px); }
+        @keyframes lineExpand {
+            to { width: clamp(100px, 25vw, 200px); }
         }
 
-        /* Subtle tagline below line */
+        /* Tagline with cinematic reveal */
         .loader-sub {
             font-family: var(--font-body);
-            font-size: 0.75rem;
+            font-size: 0.85rem;
             font-weight: 400;
-            letter-spacing: 4px;
+            letter-spacing: 12px;
             text-transform: uppercase;
-            color: var(--text-muted);
-            margin-top: 16px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 20px;
             opacity: 0;
-            animation: loaderFadeIn 0.5s ease 1s forwards;
+            z-index: 2;
+            animation: taglineReveal 1s cubic-bezier(0.22, 1, 0.36, 1) 2s forwards;
         }
 
-        @keyframes loaderFadeIn {
-            to { opacity: 1; }
+        @keyframes taglineReveal {
+            0% { opacity: 0; letter-spacing: 16px; transform: translateY(10px); }
+            100% { opacity: 1; letter-spacing: 6px; transform: translateY(0); }
         }
 
         /* ============================================
@@ -604,7 +715,7 @@
            SECTION STYLES (shared)
            ============================================ */
         section {
-            padding: 120px 0;
+            padding: 80px 0;
             position: relative;
         }
 
@@ -644,7 +755,7 @@
             font-size: 1.1rem;
             color: var(--text-secondary);
             max-width: 600px;
-            margin-bottom: 60px;
+            margin-bottom: 40px;
         }
 
         .reveal {
@@ -668,7 +779,7 @@
         .about-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 60px;
+            gap: 40px;
             align-items: center;
         }
 
@@ -755,93 +866,6 @@
             font-size: 0.85rem;
             color: var(--text-secondary);
             margin-top: 4px;
-        }
-
-        /* ============================================
-           EXPERIENCE TIMELINE
-           ============================================ */
-        .timeline {
-            position: relative;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .timeline::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 2px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 2px;
-            transform-origin: top;
-            transform: scaleY(var(--timeline-progress, 0));
-            transition: transform 0.1s linear;
-        }
-
-        .timeline-item {
-            position: relative;
-            padding-left: 48px;
-            padding-bottom: 60px;
-            opacity: 0;
-            transform: translateX(-30px) translateY(30px);
-            transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
-        }
-
-        .timeline-item.visible {
-            opacity: 1;
-            transform: translateX(0) translateY(0);
-        }
-
-        .timeline-item:last-child { padding-bottom: 0; }
-
-        .timeline-dot {
-            position: absolute;
-            left: -7px;
-            top: 4px;
-            width: 16px;
-            height: 16px;
-            background: var(--text-primary);
-            border-radius: 50%;
-            border: 3px solid var(--bg-primary);
-            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2);
-        }
-
-        .timeline-item.current .timeline-dot {
-            animation: pulse-dot 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse-dot {
-            0%, 100% { box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2); }
-            50% { box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.08); }
-        }
-
-        .timeline-date {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            font-weight: 600;
-            margin-bottom: 6px;
-        }
-
-        .timeline-role {
-            font-family: var(--font-heading);
-            font-size: 1.4rem;
-            font-weight: 700;
-            margin-bottom: 4px;
-        }
-
-        .timeline-company {
-            font-size: 1rem;
-            color: #34c759;
-            font-weight: 600;
-            margin-bottom: 12px;
-        }
-
-        .timeline-desc {
-            font-size: 0.95rem;
-            color: var(--text-secondary);
-            line-height: 1.7;
         }
 
         .timeline-tags {
@@ -969,10 +993,6 @@
         /* ============================================
            SKILLS
            ============================================ */
-        .skills {
-            background: var(--bg-primary);
-        }
-
         .skills-grid {
             display: flex;
             flex-wrap: wrap;
@@ -1009,46 +1029,91 @@
         /* ============================================
            TESTIMONIALS
            ============================================ */
-        .testimonials-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-            gap: 24px;
+        .topmate-stats {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .topmate-stat {
+            text-align: center;
+        }
+
+        .topmate-stat-number {
+            font-family: var(--font-heading);
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1.2;
+        }
+
+        .topmate-stat-label {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .topmate-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 100px;
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+            text-decoration: none;
+        }
+
+        .topmate-badge:hover {
+            border-color: rgba(255, 255, 255, 0.15);
+            color: var(--text-primary);
+        }
+
+        .testimonial-carousel {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .testimonial-track {
+            display: flex;
+            transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .testimonial-slide {
+            min-width: 50%;
+            padding: 0 12px;
+            box-sizing: border-box;
         }
 
         .testimonial-card {
-            padding: 36px;
+            padding: 32px;
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 20px;
             position: relative;
             transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-            transform-style: preserve-3d;
-            will-change: transform;
-            opacity: 0;
-            transform: scale(0.9) translateY(30px);
-        }
-
-        .testimonial-card.visible {
-            opacity: 1;
-            transform: scale(1) translateY(0);
+            height: 100%;
         }
 
         .testimonial-card:hover {
             border-color: rgba(255, 255, 255, 0.12);
-            box-shadow: none;
         }
 
-        .testimonial-card .tilt-shine {
-            position: absolute;
-            inset: 0;
-            border-radius: 20px;
-            background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255,255,255,0.04) 0%, transparent 60%);
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.3s;
+        .testimonial-rating {
+            display: flex;
+            gap: 2px;
+            margin-bottom: 12px;
         }
 
-        .testimonial-card:hover .tilt-shine { opacity: 1; }
+        .testimonial-star {
+            color: #ff9f0a;
+            font-size: 0.9rem;
+        }
 
         .testimonial-quote {
             font-size: 2.5rem;
@@ -1060,7 +1125,7 @@
         }
 
         .testimonial-text {
-            font-size: 1.05rem;
+            font-size: 0.95rem;
             color: var(--text-secondary);
             line-height: 1.8;
             margin-bottom: 20px;
@@ -1070,11 +1135,35 @@
         .testimonial-author {
             font-weight: 700;
             color: var(--text-primary);
+            font-size: 0.95rem;
         }
 
         .testimonial-role {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: var(--text-muted);
+        }
+
+        .testimonial-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 24px;
+        }
+
+        .testimonial-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            padding: 0;
+        }
+
+        .testimonial-dot.active {
+            background: rgba(255, 255, 255, 0.6);
+            transform: scale(1.3);
         }
 
         /* ============================================
@@ -1245,7 +1334,7 @@
 
         .chrono-detail {
             position: relative;
-            min-height: 220px;
+            min-height: 280px;
         }
 
         .chrono-card {
@@ -1293,6 +1382,131 @@
         }
 
         /* ============================================
+           GROWTH GRAPH
+           ============================================ */
+        .growth-graph {
+            position: relative;
+        }
+
+        .graph-legend {
+            display: flex;
+            gap: 24px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .legend-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .graph-container {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 20px;
+            padding: 24px 16px 16px;
+            margin-bottom: 24px;
+            overflow: hidden;
+        }
+
+        .graph-svg {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .graph-line {
+            stroke-dasharray: 2000;
+            stroke-dashoffset: 2000;
+            transition: stroke-dashoffset 2s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .growth-graph.visible .graph-line {
+            stroke-dashoffset: 0;
+        }
+
+        .graph-area {
+            transition: opacity 1s ease 1s;
+        }
+
+        .growth-graph.visible .graph-area {
+            opacity: 1 !important;
+        }
+
+        .graph-dot {
+            transition: opacity 0.4s ease 2s;
+        }
+
+        .growth-graph.visible .graph-dot {
+            opacity: 1 !important;
+        }
+
+        .graph-endpoint {
+            transition: opacity 0.4s ease 2.2s;
+        }
+
+        .growth-graph.visible .graph-endpoint {
+            opacity: 1 !important;
+        }
+
+        .graph-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .graph-card {
+            padding: 24px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            transition: all 0.3s;
+        }
+
+        .graph-card:hover {
+            border-color: rgba(255, 255, 255, 0.12);
+        }
+
+        .graph-card-icon {
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+        }
+
+        .graph-card-title {
+            font-family: var(--font-heading);
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .graph-card-value {
+            font-family: var(--font-heading);
+            font-size: 1.3rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .graph-card-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* ============================================
            SECTION BACKGROUND ALTERNATION
            ============================================ */
         #experience {
@@ -1300,15 +1514,23 @@
         }
 
         #sidehustles {
-            background: var(--bg-primary);
-        }
-
-        #testimonials {
             background: var(--bg-secondary);
         }
 
-        .connect {
+        #projects {
             background: var(--bg-primary);
+        }
+
+        #skills {
+            background: var(--bg-secondary);
+        }
+
+        #testimonials {
+            background: var(--bg-primary);
+        }
+
+        .connect {
+            background: var(--bg-secondary);
         }
 
         /* ============================================
@@ -1332,7 +1554,7 @@
                 border-bottom: 1px solid var(--border-subtle);
             }
 
-            section { padding: 60px 0; }
+            section { padding: 48px 0; }
 
             .container { padding: 0 20px; }
 
@@ -1379,12 +1601,7 @@
             .avatar-ring { width: 80px; height: 80px; }
             .about-avatar { margin-bottom: 20px; }
 
-            /* Timeline */
-            .timeline::before { left: 0; }
-            .timeline-item { padding-left: 28px; padding-bottom: 40px; }
-            .timeline-dot { left: -7px; width: 14px; height: 14px; }
-            .timeline-role { font-size: 1.15rem; }
-            .timeline-desc { font-size: 0.88rem; }
+            /* Timeline tags */
             .timeline-tags { gap: 6px; }
             .timeline-tag { padding: 3px 10px; font-size: 0.7rem; }
             .award-badge { font-size: 0.75rem; padding: 5px 12px; }
@@ -1408,14 +1625,21 @@
             .project-card p { font-size: 0.88rem; }
             .project-icon { width: 44px; height: 44px; font-size: 1.3rem; border-radius: 12px; margin-bottom: 16px; }
 
+            /* Growth Graph */
+            .graph-cards { grid-template-columns: 1fr; gap: 12px; }
+            .graph-card { padding: 20px 16px; }
+            .graph-legend { gap: 16px; }
+            .legend-label { font-size: 0.78rem; }
+
             /* Skills */
             .skill-tag { padding: 8px 16px; font-size: 0.82rem; }
 
-            /* Testimonials */
-            .testimonials-grid { grid-template-columns: 1fr; gap: 16px; }
-            .testimonial-card { padding: 24px 20px; border-radius: 16px; }
-            .testimonial-text { font-size: 0.92rem; }
-            .testimonial-quote { font-size: 2rem; }
+            /* Testimonials carousel */
+            .testimonial-slide { min-width: 100% !important; }
+            .topmate-stats { gap: 20px; }
+            .topmate-stat-number { font-size: 1.4rem; }
+            .testimonial-card { padding: 24px 20px; }
+            .testimonial-text { font-size: 0.9rem; }
 
             /* Connect */
             .connect { padding-bottom: 48px; }
@@ -1483,11 +1707,13 @@
     <!-- LOADING SCREEN -->
     <div class="loader" id="loader">
         <div class="loader-logo">
+            <div class="loader-glow"></div>
+            <div class="loader-bars"><span></span><span></span><span></span><span></span></div>
             <div class="loader-text">
                 <span>H</span><span>V</span><span>M</span>
             </div>
             <div class="loader-line"></div>
-            <div class="loader-sub">Builder &middot; Operator</div>
+            <div class="loader-sub">Builder &middot; Operator &middot; Hustler</div>
         </div>
     </div>
 
@@ -1504,8 +1730,7 @@
             <a href="#" class="nav-logo">HVM.</a>
             <ul class="nav-links" id="navLinks">
                 <li><a href="#about">About</a></li>
-                <li><a href="#experience">Experience</a></li>
-                <li><a href="#chronology">Journey</a></li>
+                <li><a href="#experience">Journey</a></li>
                 <li><a href="#sidehustles">Side Hustles</a></li>
                 <li><a href="#connect">Connect</a></li>
             </ul>
@@ -1638,89 +1863,8 @@
         </div>
     </section>
 
-    <!-- EXPERIENCE TIMELINE -->
+    <!-- INTERACTIVE CHRONOLOGY / JOURNEY -->
     <section id="experience">
-        <div class="container">
-            <div class="reveal">
-                <div class="section-label">Experience</div>
-                <h2 class="section-title">The journey so far.</h2>
-                <p class="section-desc">From engine shops to scaling India's biggest consumer companies &mdash; every step has been about building things that matter.</p>
-            </div>
-            <div class="timeline" id="timeline">
-                <div class="timeline-item current">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-date">2022 &mdash; Present</div>
-                    <div class="timeline-role">Senior Program Manager</div>
-                    <div class="timeline-company">Zomato &bull; Hyderabad</div>
-                    <div class="timeline-desc">
-                        Working with billion-dollar brands, helping them scale from 10x to 100x to 2000x. Built go-to-market strategies and executed them end-to-end, moving city market share by 3 percentage points. Created in-app promo strategies, worked on P&amp;L-related initiatives, and shipped multiple data-driven projects from scratch.
-                    </div>
-                    <div class="timeline-tags">
-                        <span class="timeline-tag">Brand Scaling (10x&rarr;2000x)</span>
-                        <span class="timeline-tag">GTM Strategy</span>
-                        <span class="timeline-tag">Market Share +3pp</span>
-                        <span class="timeline-tag">Promo Strategy</span>
-                        <span class="timeline-tag">Data-Driven Projects</span>
-                    </div>
-                </div>
-
-                <div class="timeline-item">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-date">2018 &mdash; 2022</div>
-                    <div class="timeline-role">Business &amp; Operations (6 Promotions)</div>
-                    <div class="timeline-company">UrbanCompany (UrbanClap)</div>
-                    <div class="timeline-desc">
-                        Started as an intern wanting to explore the gig economy. Grew through 6 promotions. Part of the UC Scalers program, directly responsible for giving employment to 6,000-7,000 people and helping them earn significantly better &mdash; the proudest moment was seeing a professional go from earning &#8377;20K/month to &#8377;40K/month. Won the UC Champion's Award twice for ownership and stellar execution.
-                    </div>
-                    <div class="timeline-tags">
-                        <span class="timeline-tag">6 Promotions</span>
-                        <span class="timeline-tag">6K-7K Jobs Created</span>
-                        <span class="timeline-tag">P&amp;L Management</span>
-                        <span class="timeline-tag">UC Scalers</span>
-                        <span class="timeline-tag">Gig Economy</span>
-                    </div>
-                    <div class="award-badge">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                        UC Champion's Award &times; 2
-                    </div>
-                </div>
-
-                <div class="timeline-item">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-date">2018</div>
-                    <div class="timeline-role">B2B Sales</div>
-                    <div class="timeline-company">First Job &bull; 6-7 Months</div>
-                    <div class="timeline-desc">
-                        Straight out of college, jumped into B2B sales. Grinded for 6-7 months learning how to sell, pitch, and handle rejection. It wasn't glamorous, but it taught me how businesses actually work from the ground up.
-                    </div>
-                    <div class="timeline-tags">
-                        <span class="timeline-tag">B2B Sales</span>
-                        <span class="timeline-tag">Business Fundamentals</span>
-                    </div>
-                </div>
-
-                <div class="timeline-item">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-date">2014 &mdash; 2018</div>
-                    <div class="timeline-role">B.Tech &bull; Mechanical Engineering</div>
-                    <div class="timeline-company">National Institute of Technology, Raipur</div>
-                    <div class="timeline-desc">
-                        More than just a degree. Built a Formula Student race car from scratch and captained a 25-member team. As Head of E-cell, helped startups raise &#8377;1.5 crores in funding through Honor Shell. Led the Motorsports Club and interned at HAL &amp; Vizag Steel Plant. College wasn't just education &mdash; it was a launchpad.
-                    </div>
-                    <div class="timeline-tags">
-                        <span class="timeline-tag">Formula Student</span>
-                        <span class="timeline-tag">&#8377;1.5Cr Fundraising</span>
-                        <span class="timeline-tag">E-cell Head</span>
-                        <span class="timeline-tag">Motorsports Club</span>
-                        <span class="timeline-tag">Team Captain</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- INTERACTIVE CHRONOLOGY GRAPH -->
-    <section id="chronology" class="about">
         <div class="container">
             <div class="reveal">
                 <div class="section-label">The Full Story</div>
@@ -1760,34 +1904,70 @@
 
                 <div class="chrono-detail" id="chronoDetail">
                     <div class="chrono-card" data-era="nit">
-                        <div class="chrono-card-label">NIT RAIPUR</div>
-                        <div class="chrono-card-title">Where It All Started</div>
-                        <p>Cracked JEE Mains &rarr; NIT Raipur. Built a Formula Student race car from scratch, led a 25-member team, ran the E-cell, and helped startups raise &#8377;1.5 crores. This is where the builder in me was born.</p>
+                        <div class="chrono-card-label">NIT RAIPUR &middot; 2014-2018</div>
+                        <div class="chrono-card-title">Where It All Started.</div>
+                        <p>Cracked JEE Mains &rarr; NIT Raipur, Mechanical Engineering. Built a Formula Student race car from scratch and captained a 25-member team. As Head of E-cell, helped startups raise &#8377;1.5 crores through Honor Shell. Interned at HAL Engine Division &amp; Vizag Steel Plant. College wasn't just education &mdash; it was a launchpad.</p>
+                        <div class="timeline-tags" style="margin-top:12px;">
+                            <span class="timeline-tag">Formula Student</span>
+                            <span class="timeline-tag">&#8377;1.5Cr Fundraising</span>
+                            <span class="timeline-tag">E-cell Head</span>
+                            <span class="timeline-tag">Team Captain</span>
+                        </div>
                     </div>
                     <div class="chrono-card" data-era="hustle">
-                        <div class="chrono-card-label">THE HUSTLE YEARS</div>
-                        <div class="chrono-card-title">Engineering + Entrepreneurship</div>
-                        <p>Interned at HAL Engine Division &amp; Vizag Steel Plant. Simultaneously running Honor Shell, helping early-stage startups with fundraising. Learned that real engineering is about building things people actually need.</p>
+                        <div class="chrono-card-label">THE HUSTLE YEARS &middot; 2016-2017</div>
+                        <div class="chrono-card-title">Engineering + Entrepreneurship.</div>
+                        <p>Simultaneously running Honor Shell, helping early-stage startups with fundraising while still in college. Learned that real engineering is about building things people actually need &mdash; not just passing exams.</p>
+                        <div class="timeline-tags" style="margin-top:12px;">
+                            <span class="timeline-tag">Startup Fundraising</span>
+                            <span class="timeline-tag">Honor Shell</span>
+                        </div>
                     </div>
                     <div class="chrono-card" data-era="b2b">
-                        <div class="chrono-card-label">FIRST JOB</div>
-                        <div class="chrono-card-title">B2B Sales Grind</div>
-                        <p>Graduated and jumped straight into B2B sales. 6-7 months of cold calls, pitches, and learning how businesses actually work. Not glamorous, but it built a foundation of hustle and resilience.</p>
+                        <div class="chrono-card-label">FIRST JOB &middot; 2018</div>
+                        <div class="chrono-card-title">The B2B Sales Grind.</div>
+                        <p>Graduated and jumped straight into B2B sales. 6-7 months of cold calls, pitches, and learning how businesses actually work from the ground up. Not glamorous, but it built a foundation of hustle and resilience.</p>
+                        <div class="timeline-tags" style="margin-top:12px;">
+                            <span class="timeline-tag">B2B Sales</span>
+                            <span class="timeline-tag">Business Fundamentals</span>
+                        </div>
                     </div>
                     <div class="chrono-card" data-era="uc">
-                        <div class="chrono-card-label">URBANCOMPANY</div>
+                        <div class="chrono-card-label">URBANCOMPANY &middot; 2018-2022</div>
                         <div class="chrono-card-title">6 Promotions. 7,000 Lives Changed.</div>
-                        <p>Joined as an intern to explore the gig economy. Grew through 6 promotions. As part of UC Scalers, gave employment to 6,000-7,000 people. Proudest moment: watching someone go from &#8377;20K to &#8377;40K/month. Won UC Champion's Award twice.</p>
+                        <p>Joined as an intern to explore the gig economy. Grew through 6 promotions. As part of UC Scalers, gave employment to 6,000-7,000 people. Proudest moment: watching someone go from &#8377;20K to &#8377;40K/month. Won UC Champion's Award twice for ownership and stellar execution.</p>
+                        <div class="timeline-tags" style="margin-top:12px;">
+                            <span class="timeline-tag">6 Promotions</span>
+                            <span class="timeline-tag">6K-7K Jobs Created</span>
+                            <span class="timeline-tag">P&amp;L Management</span>
+                            <span class="timeline-tag">UC Scalers</span>
+                        </div>
+                        <div class="award-badge" style="margin-top:12px;">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                            UC Champion's Award &times; 2
+                        </div>
                     </div>
                     <div class="chrono-card" data-era="zomato">
-                        <div class="chrono-card-label">ZOMATO</div>
+                        <div class="chrono-card-label">ZOMATO &middot; 2022-PRESENT</div>
                         <div class="chrono-card-title">Billion-Dollar Brands. City-Level Impact.</div>
-                        <p>Working with the biggest brands in India, scaling them from 10x to 2000x. Built GTM strategies, moved market share by 3pp, created in-app promo strategies, and shipped data-driven projects that impact millions.</p>
+                        <p>Working with the biggest brands in India, scaling them from 10x to 2000x. Built GTM strategies end-to-end, moved city market share by 3 percentage points. Created in-app promo strategies, worked on P&amp;L initiatives, and shipped data-driven projects impacting millions.</p>
+                        <div class="timeline-tags" style="margin-top:12px;">
+                            <span class="timeline-tag">Brand Scaling (10x&rarr;2000x)</span>
+                            <span class="timeline-tag">GTM Strategy</span>
+                            <span class="timeline-tag">Market Share +3pp</span>
+                            <span class="timeline-tag">Data-Driven Projects</span>
+                        </div>
                     </div>
                     <div class="chrono-card active" data-era="now">
-                        <div class="chrono-card-label">RIGHT NOW</div>
+                        <div class="chrono-card-label">RIGHT NOW &middot; 2025</div>
                         <div class="chrono-card-title">Building the Future.</div>
-                        <p>Senior Program Manager at Zomato. Running an Airbnb side hustle. Managing a $150K global investment portfolio. Building AI tools. Becoming a generalist who can build anything. The best is yet to come.</p>
+                        <p>Senior Program Manager at Zomato. Running an Airbnb side hustle generating $2K/month. Managing a $150K global investment portfolio. Building AI tools. Becoming a generalist who can build anything. The best is yet to come.</p>
+                        <div class="timeline-tags" style="margin-top:12px;">
+                            <span class="timeline-tag">Program Management</span>
+                            <span class="timeline-tag">Airbnb Operator</span>
+                            <span class="timeline-tag">AI Builder</span>
+                            <span class="timeline-tag">$150K Portfolio</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1799,46 +1979,108 @@
         <div class="container">
             <div class="reveal">
                 <div class="section-label">Side Hustles & Passions</div>
-                <h2 class="section-title">The stuff I do for fun (that also makes money).</h2>
-                <p class="section-desc">Because building just one thing at a time was never my style.</p>
+                <h2 class="section-title">Growth, visualized.</h2>
+                <p class="section-desc">Because building just one thing at a time was never my style. Here's how the side quests are trending.</p>
             </div>
-            <div class="projects-grid">
-                <div class="project-card tilt-card reveal">
-                    <div class="tilt-shine"></div>
-                    <div class="project-icon" style="background:rgba(255,255,255,0.06);">&#127968;</div>
-                    <h3>Airbnb Operator</h3>
-                    <p>
-                        Running an Airbnb property generating &#8377;2,000 monthly recurring revenue. From listing optimization to guest experience &mdash; built the entire operation from scratch. Passive income, active learning.
-                    </p>
-                    <div class="timeline-tags" style="margin-top:16px;">
-                        <span class="timeline-tag">&#8377;2K Monthly RR</span>
-                        <span class="timeline-tag">Hospitality</span>
+            <div class="growth-graph reveal" id="growthGraph">
+                <div class="graph-legend">
+                    <div class="legend-item">
+                        <span class="legend-dot" style="background: #2997ff;"></span>
+                        <span class="legend-label">Airbnb MRR</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-dot" style="background: #34c759;"></span>
+                        <span class="legend-label">Investment Portfolio</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-dot" style="background: #ff9f0a;"></span>
+                        <span class="legend-label">AI Tools</span>
                     </div>
                 </div>
-                <div class="project-card tilt-card reveal">
-                    <div class="tilt-shine"></div>
-                    <div class="project-icon" style="background:rgba(255,255,255,0.06);">&#128200;</div>
-                    <h3>$150K Global Portfolio</h3>
-                    <p>
-                        Built a $150K global investment portfolio entirely through my own research. No advisors, no shortcuts &mdash; pure independent analysis and conviction-based investing across markets.
-                    </p>
-                    <div class="timeline-tags" style="margin-top:16px;">
-                        <span class="timeline-tag">$150K AUM</span>
-                        <span class="timeline-tag">Self-Researched</span>
-                        <span class="timeline-tag">Global Markets</span>
-                    </div>
+                <div class="graph-container">
+                    <svg viewBox="0 0 800 400" class="graph-svg" id="graphSvg" preserveAspectRatio="xMidYMid meet">
+                        <!-- Grid lines -->
+                        <line x1="80" y1="40" x2="80" y2="340" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+                        <line x1="80" y1="340" x2="760" y2="340" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+                        <line x1="80" y1="265" x2="760" y2="265" stroke="rgba(255,255,255,0.04)" stroke-width="1" stroke-dasharray="4,6"/>
+                        <line x1="80" y1="190" x2="760" y2="190" stroke="rgba(255,255,255,0.04)" stroke-width="1" stroke-dasharray="4,6"/>
+                        <line x1="80" y1="115" x2="760" y2="115" stroke="rgba(255,255,255,0.04)" stroke-width="1" stroke-dasharray="4,6"/>
+                        <line x1="80" y1="40" x2="760" y2="40" stroke="rgba(255,255,255,0.04)" stroke-width="1" stroke-dasharray="4,6"/>
+
+                        <!-- Y-axis labels -->
+                        <text x="70" y="344" text-anchor="end" fill="rgba(255,255,255,0.3)" font-size="11" font-family="Inter, sans-serif">$0</text>
+                        <text x="70" y="269" text-anchor="end" fill="rgba(255,255,255,0.3)" font-size="11" font-family="Inter, sans-serif">$500</text>
+                        <text x="70" y="194" text-anchor="end" fill="rgba(255,255,255,0.3)" font-size="11" font-family="Inter, sans-serif">$1K</text>
+                        <text x="70" y="119" text-anchor="end" fill="rgba(255,255,255,0.3)" font-size="11" font-family="Inter, sans-serif">$1.5K</text>
+                        <text x="70" y="44" text-anchor="end" fill="rgba(255,255,255,0.3)" font-size="11" font-family="Inter, sans-serif">$2K</text>
+
+                        <!-- X-axis labels -->
+                        <text x="125" y="365" text-anchor="middle" fill="rgba(255,255,255,0.3)" font-size="11" font-family="Inter, sans-serif">2023</text>
+                        <text x="305" y="365" text-anchor="middle" fill="rgba(255,255,255,0.3)" font-size="11" font-family="Inter, sans-serif">2024 Q1</text>
+                        <text x="485" y="365" text-anchor="middle" fill="rgba(255,255,255,0.3)" font-size="11" font-family="Inter, sans-serif">2024 Q3</text>
+                        <text x="670" y="365" text-anchor="middle" fill="rgba(255,255,255,0.3)" font-size="11" font-family="Inter, sans-serif">2025</text>
+
+                        <!-- Gradient fills under lines -->
+                        <defs>
+                            <linearGradient id="gradAirbnb" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#2997ff" stop-opacity="0.2"/>
+                                <stop offset="100%" stop-color="#2997ff" stop-opacity="0"/>
+                            </linearGradient>
+                            <linearGradient id="gradPortfolio" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#34c759" stop-opacity="0.15"/>
+                                <stop offset="100%" stop-color="#34c759" stop-opacity="0"/>
+                            </linearGradient>
+                            <linearGradient id="gradAI" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#ff9f0a" stop-opacity="0.15"/>
+                                <stop offset="100%" stop-color="#ff9f0a" stop-opacity="0"/>
+                            </linearGradient>
+                        </defs>
+
+                        <!-- Area fills -->
+                        <path class="graph-area" d="M125,340 L215,310 L305,280 L395,230 L485,180 L580,120 L670,60 L760,40 L760,340 Z" fill="url(#gradAirbnb)" opacity="0"/>
+                        <path class="graph-area" d="M125,340 L215,330 L305,310 L395,280 L485,240 L580,190 L670,150 L760,100 L760,340 Z" fill="url(#gradPortfolio)" opacity="0"/>
+                        <path class="graph-area" d="M485,340 L580,300 L670,250 L760,200 L760,340 Z" fill="url(#gradAI)" opacity="0"/>
+
+                        <!-- Lines -->
+                        <polyline class="graph-line" id="lineAirbnb"
+                            points="125,340 215,310 305,280 395,230 485,180 580,120 670,60 760,40"
+                            fill="none" stroke="#2997ff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <polyline class="graph-line" id="linePortfolio"
+                            points="125,340 215,330 305,310 395,280 485,240 580,190 670,150 760,100"
+                            fill="none" stroke="#34c759" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <polyline class="graph-line" id="lineAI"
+                            points="485,340 580,300 670,250 760,200"
+                            fill="none" stroke="#ff9f0a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+                        <!-- Endpoint dots -->
+                        <circle class="graph-dot" cx="760" cy="40" r="5" fill="#2997ff" opacity="0"/>
+                        <circle class="graph-dot" cx="760" cy="100" r="5" fill="#34c759" opacity="0"/>
+                        <circle class="graph-dot" cx="760" cy="200" r="5" fill="#ff9f0a" opacity="0"/>
+
+                        <!-- Endpoint labels -->
+                        <text class="graph-endpoint" x="755" y="30" text-anchor="end" fill="#2997ff" font-size="13" font-weight="700" font-family="Space Grotesk, sans-serif" opacity="0">$2K/mo</text>
+                        <text class="graph-endpoint" x="755" y="92" text-anchor="end" fill="#34c759" font-size="13" font-weight="700" font-family="Space Grotesk, sans-serif" opacity="0">$150K AUM</text>
+                        <text class="graph-endpoint" x="755" y="192" text-anchor="end" fill="#ff9f0a" font-size="13" font-weight="700" font-family="Space Grotesk, sans-serif" opacity="0">Building...</text>
+                    </svg>
                 </div>
-                <div class="project-card tilt-card reveal">
-                    <div class="tilt-shine"></div>
-                    <div class="project-icon" style="background:rgba(255,255,255,0.06);">&#129302;</div>
-                    <h3>AI Tools Builder</h3>
-                    <p>
-                        Currently building and shipping AI tools. On a mission to become a true generalist &mdash; someone who can take an idea from zero to one, regardless of the domain. The future belongs to builders.
-                    </p>
-                    <div class="timeline-tags" style="margin-top:16px;">
-                        <span class="timeline-tag">AI / LLMs</span>
-                        <span class="timeline-tag">Generalist Builder</span>
-                        <span class="timeline-tag">0 &rarr; 1</span>
+                <div class="graph-cards">
+                    <div class="graph-card">
+                        <div class="graph-card-icon">&#127968;</div>
+                        <div class="graph-card-title">Airbnb Operator</div>
+                        <div class="graph-card-value" style="color:#2997ff;">$2,000/mo MRR</div>
+                        <div class="graph-card-desc">Listing optimization to guest experience &mdash; built from scratch.</div>
+                    </div>
+                    <div class="graph-card">
+                        <div class="graph-card-icon">&#128200;</div>
+                        <div class="graph-card-title">Global Portfolio</div>
+                        <div class="graph-card-value" style="color:#34c759;">$150K AUM</div>
+                        <div class="graph-card-desc">Self-researched, conviction-based investing across global markets.</div>
+                    </div>
+                    <div class="graph-card">
+                        <div class="graph-card-icon">&#129302;</div>
+                        <div class="graph-card-title">AI Tools</div>
+                        <div class="graph-card-value" style="color:#ff9f0a;">In Progress</div>
+                        <div class="graph-card-desc">Building &amp; shipping AI tools. From zero to one, any domain.</div>
                     </div>
                 </div>
             </div>
@@ -1846,7 +2088,7 @@
     </section>
 
     <!-- PROJECTS / COOL STUFF -->
-    <section id="projects" class="about">
+    <section id="projects">
         <div class="container">
             <div class="reveal">
                 <div class="section-label">Projects & Cool Stuff</div>
@@ -1887,7 +2129,7 @@
     </section>
 
     <!-- SKILLS -->
-    <section class="skills" id="skills">
+    <section id="skills">
         <div class="container">
             <div class="reveal">
                 <div class="section-label">Skills & Arsenal</div>
@@ -1920,27 +2162,83 @@
             <div class="reveal">
                 <div class="section-label">What People Say</div>
                 <h2 class="section-title">Don't take my word for it.</h2>
-                <p class="section-desc">Here's what people I've worked with have to say.</p>
+                <p class="section-desc">Real reviews from real conversations.</p>
             </div>
-            <div class="testimonials-grid">
-                <div class="testimonial-card tilt-card">
-                    <div class="tilt-shine"></div>
-                    <div class="testimonial-quote">&ldquo;</div>
-                    <p class="testimonial-text">
-                        Harsh is a solid operator and a stellar executor. He brings a level of ownership and intensity to everything he does that's rare to find. He doesn't just manage &mdash; he drives results.
-                    </p>
-                    <div class="testimonial-author">Divyam Upneja</div>
-                    <div class="testimonial-role">Former Colleague</div>
+            <div class="topmate-stats reveal">
+                <div class="topmate-stat">
+                    <div class="topmate-stat-number">165+</div>
+                    <div class="topmate-stat-label">Bookings</div>
                 </div>
-                <div class="testimonial-card tilt-card">
-                    <div class="tilt-shine"></div>
-                    <div class="testimonial-quote">&ldquo;</div>
-                    <p class="testimonial-text">
-                        A driven individual with strong management skills and contagious energy. Harsh has this ability to rally a team around a goal and make things happen, even when the odds are stacked against you.
-                    </p>
-                    <div class="testimonial-author">Shivam Srivastava</div>
-                    <div class="testimonial-role">Former Colleague</div>
+                <div class="topmate-stat">
+                    <div class="topmate-stat-number">4.97</div>
+                    <div class="topmate-stat-label">Rating</div>
                 </div>
+                <div class="topmate-stat">
+                    <div class="topmate-stat-number">Top 1%</div>
+                    <div class="topmate-stat-label">On Topmate</div>
+                </div>
+                <a href="https://topmate.io/k_harsh_vardhan/" target="_blank" rel="noopener" class="topmate-badge">
+                    View on Topmate &rarr;
+                </a>
+            </div>
+            <div class="testimonial-carousel reveal" id="testimonialCarousel">
+                <div class="testimonial-track" id="testimonialTrack">
+                    <div class="testimonial-slide">
+                        <div class="testimonial-card">
+                            <div class="testimonial-rating"><span class="testimonial-star">&#9733;</span><span class="testimonial-star">&#9733;</span><span class="testimonial-star">&#9733;</span><span class="testimonial-star">&#9733;</span><span class="testimonial-star">&#9733;</span></div>
+                            <div class="testimonial-quote">&ldquo;</div>
+                            <p class="testimonial-text">Harsh is a solid operator and a stellar executor. He brings a level of ownership and intensity to everything he does that's rare to find. He doesn't just manage &mdash; he drives results.</p>
+                            <div class="testimonial-author">Divyam Upneja</div>
+                            <div class="testimonial-role">Former Colleague</div>
+                        </div>
+                    </div>
+                    <div class="testimonial-slide">
+                        <div class="testimonial-card">
+                            <div class="testimonial-rating"><span class="testimonial-star">&#9733;</span><span class="testimonial-star">&#9733;</span><span class="testimonial-star">&#9733;</span><span class="testimonial-star">&#9733;</span><span class="testimonial-star">&#9733;</span></div>
+                            <div class="testimonial-quote">&ldquo;</div>
+                            <p class="testimonial-text">A driven individual with strong management skills and contagious energy. Harsh has this ability to rally a team around a goal and make things happen, even when the odds are stacked against you.</p>
+                            <div class="testimonial-author">Shivam Srivastava</div>
+                            <div class="testimonial-role">Former Colleague</div>
+                        </div>
+                    </div>
+                    <div class="testimonial-slide">
+                        <div class="testimonial-card">
+                            <div class="testimonial-rating"><span class="testimonial-star">&#9733;</span><span class="testimonial-star">&#9733;</span><span class="testimonial-star">&#9733;</span><span class="testimonial-star">&#9733;</span><span class="testimonial-star">&#9733;</span></div>
+                            <div class="testimonial-quote">&ldquo;</div>
+                            <p class="testimonial-text">Looking for a session that's both engaging and insightful? Book Harsh! He took the time to truly understand my background and perspective, which helped him guide me thoughtfully on choosing the right career path.</p>
+                            <div class="testimonial-author">Usharani Koorgalli Jayaramu</div>
+                            <div class="testimonial-role">Topmate &middot; Jun 2025</div>
+                        </div>
+                    </div>
+                    <div class="testimonial-slide">
+                        <div class="testimonial-card">
+                            <div class="testimonial-rating"><span class="testimonial-star">&#9733;</span><span class="testimonial-star">&#9733;</span><span class="testimonial-star">&#9733;</span><span class="testimonial-star">&#9733;</span><span class="testimonial-star">&#9733;</span></div>
+                            <div class="testimonial-quote">&ldquo;</div>
+                            <p class="testimonial-text">He is an excellent orator with deep business acumen &mdash; a go-to person for mastering self-introductions and solving problems practices.</p>
+                            <div class="testimonial-author">Raakesh R R</div>
+                            <div class="testimonial-role">Topmate &middot; May 2025</div>
+                        </div>
+                    </div>
+                    <div class="testimonial-slide">
+                        <div class="testimonial-card">
+                            <div class="testimonial-rating"><span class="testimonial-star">&#9733;</span><span class="testimonial-star">&#9733;</span><span class="testimonial-star">&#9733;</span><span class="testimonial-star">&#9733;</span><span class="testimonial-star">&#9733;</span></div>
+                            <div class="testimonial-quote">&ldquo;</div>
+                            <p class="testimonial-text">Thanks, Harsh! It was great connecting with you. Your detailed insights on structuring my career and effectively showcasing my work were incredibly valuable. The way you broke down complex topics into simpler steps was very helpful.</p>
+                            <div class="testimonial-author">Mentee</div>
+                            <div class="testimonial-role">Topmate &middot; 2025</div>
+                        </div>
+                    </div>
+                    <div class="testimonial-slide">
+                        <div class="testimonial-card">
+                            <div class="testimonial-rating"><span class="testimonial-star">&#9733;</span><span class="testimonial-star">&#9733;</span><span class="testimonial-star">&#9733;</span><span class="testimonial-star">&#9733;</span><span class="testimonial-star">&#9733;</span></div>
+                            <div class="testimonial-quote">&ldquo;</div>
+                            <p class="testimonial-text">Thank you for sharing the roadmap for Business Analytics. The session was well structured and gave me a clear understanding of the key skills and tools I need to focus on. Your insights on data handling and decision-making were incredibly helpful.</p>
+                            <div class="testimonial-author">Aspiring Analyst</div>
+                            <div class="testimonial-role">Topmate &middot; 2025</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-dots" id="testimonialDots"></div>
             </div>
         </div>
     </section>
@@ -2010,13 +2308,12 @@
         // ========================================
         const loader = document.getElementById('loader');
         window.addEventListener('load', () => {
-            // Let the logo animation play (H, V, M slide up + line wipe + tagline)
             setTimeout(() => {
                 loader.classList.add('phase-out');
                 document.body.classList.add('loaded');
                 initHeroLetters();
-            }, 2000);
-            setTimeout(() => loader.remove(), 3000);
+            }, 3200);
+            setTimeout(() => loader.remove(), 4500);
         });
 
         // ========================================
@@ -2265,30 +2562,6 @@
 
         document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
-        // Timeline items
-        const timelineObserver = new IntersectionObserver((entries) => {
-            entries.forEach((entry, i) => {
-                if (entry.isIntersecting) {
-                    setTimeout(() => entry.target.classList.add('visible'), i * 150);
-                    timelineObserver.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.15 });
-
-        document.querySelectorAll('.timeline-item').forEach(el => timelineObserver.observe(el));
-
-        // Testimonial cards
-        const testimonialObserver = new IntersectionObserver((entries) => {
-            entries.forEach((entry, i) => {
-                if (entry.isIntersecting) {
-                    setTimeout(() => entry.target.classList.add('visible'), i * 200);
-                    testimonialObserver.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.15 });
-
-        document.querySelectorAll('.testimonial-card').forEach(el => testimonialObserver.observe(el));
-
         // Skill tags — staggered cascade
         const skillsObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -2351,30 +2624,7 @@
         document.querySelectorAll('.section-title').forEach(el => wordObserver.observe(el));
 
         // ========================================
-        // 10. TIMELINE DRAW EFFECT
-        // ========================================
-        const timeline = document.getElementById('timeline');
-        function updateTimelineDraw() {
-            if (!timeline) return;
-            const rect = timeline.getBoundingClientRect();
-            const windowH = window.innerHeight;
-            const start = rect.top;
-            const height = rect.height;
-
-            if (start > windowH) {
-                timeline.style.setProperty('--timeline-progress', '0');
-            } else if (start + height < 0) {
-                timeline.style.setProperty('--timeline-progress', '1');
-            } else {
-                const progress = Math.min(1, Math.max(0, (windowH - start) / (height + windowH * 0.5)));
-                timeline.style.setProperty('--timeline-progress', progress.toString());
-            }
-        }
-        window.addEventListener('scroll', updateTimelineDraw);
-        updateTimelineDraw();
-
-        // ========================================
-        // 11. ANIMATED COUNTERS
+        // 10. ANIMATED COUNTERS
         // ========================================
         const counterObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -2511,7 +2761,106 @@
         }
 
         // ========================================
-        // 15. SMOOTH SCROLL
+        // 15. GROWTH GRAPH ANIMATION
+        // ========================================
+        const growthGraph = document.getElementById('growthGraph');
+        if (growthGraph) {
+            const graphObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        graphObserver.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.2 });
+            graphObserver.observe(growthGraph);
+        }
+
+        // ========================================
+        // 16. TESTIMONIAL CAROUSEL
+        // ========================================
+        const testimonialTrack = document.getElementById('testimonialTrack');
+        const testimonialDots = document.getElementById('testimonialDots');
+        const testimonialCarousel = document.getElementById('testimonialCarousel');
+
+        if (testimonialTrack && testimonialDots) {
+            const slides = testimonialTrack.querySelectorAll('.testimonial-slide');
+            const isMobileView = () => window.innerWidth <= 768;
+            const slidesPerView = () => isMobileView() ? 1 : 2;
+            let currentSlide = 0;
+            let carouselTimer = null;
+
+            function getTotalPages() {
+                return Math.ceil(slides.length / slidesPerView());
+            }
+
+            function buildDots() {
+                testimonialDots.innerHTML = '';
+                const pages = getTotalPages();
+                for (let i = 0; i < pages; i++) {
+                    const dot = document.createElement('button');
+                    dot.className = 'testimonial-dot' + (i === 0 ? ' active' : '');
+                    dot.setAttribute('aria-label', 'Go to slide ' + (i + 1));
+                    dot.addEventListener('click', () => goToSlide(i));
+                    testimonialDots.appendChild(dot);
+                }
+            }
+
+            function goToSlide(index) {
+                const pages = getTotalPages();
+                currentSlide = Math.max(0, Math.min(index, pages - 1));
+                // Each slide is 50% on desktop, 100% on mobile
+                const offset = currentSlide * slidesPerView() * (100 / slides.length);
+                testimonialTrack.style.transform = 'translateX(-' + offset + '%)';
+                const dots = testimonialDots.querySelectorAll('.testimonial-dot');
+                dots.forEach((d, i) => d.classList.toggle('active', i === currentSlide));
+            }
+
+            function nextSlide() {
+                const pages = getTotalPages();
+                goToSlide((currentSlide + 1) % pages);
+            }
+
+            function startAutoplay() {
+                if (carouselTimer) clearInterval(carouselTimer);
+                carouselTimer = setInterval(nextSlide, 4000);
+            }
+
+            function stopAutoplay() {
+                if (carouselTimer) clearInterval(carouselTimer);
+            }
+
+            // Set slide widths
+            function updateSlideWidths() {
+                const w = isMobileView() ? '100%' : '50%';
+                slides.forEach(s => s.style.minWidth = w);
+                buildDots();
+                goToSlide(0);
+            }
+
+            updateSlideWidths();
+            window.addEventListener('resize', updateSlideWidths);
+
+            // Auto-play when visible
+            const carouselObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        startAutoplay();
+                    } else {
+                        stopAutoplay();
+                    }
+                });
+            }, { threshold: 0.3 });
+
+            if (testimonialCarousel) {
+                carouselObserver.observe(testimonialCarousel);
+                testimonialCarousel.addEventListener('mouseenter', stopAutoplay);
+                testimonialCarousel.addEventListener('mouseleave', startAutoplay);
+            }
+        }
+
+        // ========================================
+        // 17. SMOOTH SCROLL
         // ========================================
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
