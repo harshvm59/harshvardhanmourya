@@ -674,8 +674,8 @@
 
         .stat-card {
             padding: 28px;
-            background: var(--bg-card);
-            border: 1px solid var(--border-subtle);
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 16px;
             text-align: center;
             transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
@@ -684,7 +684,8 @@
         }
 
         .stat-card:hover {
-            border-color: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.18);
+            background: rgba(255, 255, 255, 0.09);
             box-shadow: none;
         }
 
@@ -696,13 +697,13 @@
             -webkit-background-clip: initial;
             -webkit-text-fill-color: initial;
             background-clip: initial;
-            color: var(--text-primary);
+            color: #ffffff;
             line-height: 1.2;
         }
 
         .stat-label {
             font-size: 0.85rem;
-            color: var(--text-muted);
+            color: var(--text-secondary);
             margin-top: 4px;
         }
 
@@ -833,8 +834,8 @@
 
         .project-card {
             padding: 36px;
-            background: var(--bg-card);
-            border: 1px solid var(--border-subtle);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 20px;
             transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
             position: relative;
@@ -930,8 +931,8 @@
 
         .skill-tag {
             padding: 12px 24px;
-            background: var(--bg-card);
-            border: 1px solid var(--border-subtle);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 100px;
             font-size: 0.95rem;
             font-weight: 500;
@@ -966,8 +967,8 @@
 
         .testimonial-card {
             padding: 36px;
-            background: var(--bg-card);
-            border: 1px solid var(--border-subtle);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 20px;
             position: relative;
             transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
@@ -1061,8 +1062,8 @@
             align-items: center;
             gap: 10px;
             padding: 14px 24px;
-            background: var(--bg-card);
-            border: 1px solid var(--border-subtle);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 14px;
             color: var(--text-secondary);
             font-size: 0.9rem;
@@ -1207,8 +1208,8 @@
             transition: opacity 0.5s ease, transform 0.5s ease;
             pointer-events: none;
             padding: 36px;
-            background: var(--bg-card);
-            border: 1px solid var(--border-subtle);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 20px;
         }
 
@@ -1281,44 +1282,52 @@
                 border-bottom: 1px solid var(--border-subtle);
             }
 
-            section { padding: 72px 0; }
+            section { padding: 60px 0; }
 
             .container { padding: 0 20px; }
 
             /* Hero — compact for mobile */
+            .hero {
+                min-height: auto;
+                padding: 100px 0 60px;
+            }
             .hero h1 {
                 font-size: clamp(2.2rem, 9vw, 3.5rem);
                 letter-spacing: -1px;
+                margin-bottom: 4px;
             }
-            .hero-typing { font-size: 1rem; }
+            .hero-typing { font-size: 0.95rem; margin-bottom: 16px; }
             .hero-tagline {
-                font-size: 0.95rem;
-                margin-bottom: 28px;
+                font-size: 0.9rem;
+                margin-bottom: 24px;
+                line-height: 1.6;
             }
-            .hero-badge { font-size: 0.78rem; padding: 6px 14px; }
-            .hero-cta { flex-direction: column; gap: 12px; }
+            .hero-badge { font-size: 0.75rem; padding: 6px 12px; margin-bottom: 16px; }
+            .hero-cta { flex-direction: column; gap: 10px; margin-bottom: 32px; }
             .btn { justify-content: center; padding: 12px 24px; font-size: 0.9rem; }
             .hero-socials { gap: 12px; }
             .social-icon { width: 40px; height: 40px; border-radius: 10px; }
 
             /* Section titles — tighter */
-            .section-title { font-size: clamp(1.6rem, 5vw, 2.2rem); }
-            .section-desc { font-size: 0.95rem; margin-bottom: 40px; }
-            .section-label { font-size: 0.75rem; letter-spacing: 2px; }
+            .section-title { font-size: clamp(1.6rem, 5vw, 2.2rem); margin-bottom: 14px; }
+            .section-desc { font-size: 0.9rem; margin-bottom: 32px; line-height: 1.6; }
+            .section-label { font-size: 0.72rem; letter-spacing: 2px; margin-bottom: 8px; }
+            .section-divider { margin-bottom: 24px; }
 
             /* About */
             .about-grid {
                 grid-template-columns: 1fr;
-                gap: 32px;
+                gap: 28px;
             }
-            .about-text p { font-size: 1rem; }
-            .about-stats { grid-template-columns: 1fr 1fr; gap: 12px; }
-            .stat-card { padding: 20px 16px; }
-            .stat-number { font-size: 2rem; }
-            .stat-label { font-size: 0.78rem; }
+            .about-text p { font-size: 0.95rem; margin-bottom: 12px; line-height: 1.7; }
+            .about-stats { grid-template-columns: 1fr 1fr; gap: 10px; }
+            .stat-card { padding: 18px 14px; }
+            .stat-number { font-size: 1.8rem; }
+            .stat-label { font-size: 0.72rem; }
 
             /* Avatar */
-            .avatar-ring { width: 90px; height: 90px; }
+            .avatar-ring { width: 80px; height: 80px; }
+            .about-avatar { margin-bottom: 20px; }
 
             /* Timeline */
             .timeline::before { left: 0; }
