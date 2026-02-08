@@ -74,7 +74,7 @@
         }
 
         /* ============================================
-           LOADING SCREEN
+           LOADING SCREEN — Dashing HVM Logo
            ============================================ */
         .loader {
             position: fixed;
@@ -84,38 +84,83 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: opacity 0.5s ease, visibility 0.5s ease;
+            flex-direction: column;
+            gap: 0;
         }
 
-        .loader.done {
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
+        .loader.phase-out {
+            animation: loaderExit 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.3s forwards;
+        }
+
+        @keyframes loaderExit {
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.05); }
+            100% { opacity: 0; transform: scale(1.1); visibility: hidden; pointer-events: none; }
+        }
+
+        .loader-logo {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .loader-text {
             font-family: var(--font-heading);
-            font-size: clamp(3rem, 10vw, 7rem);
+            font-size: clamp(4rem, 15vw, 9rem);
             font-weight: 900;
-            letter-spacing: -2px;
+            letter-spacing: -4px;
+            color: #ffffff;
+            position: relative;
+            overflow: hidden;
         }
 
         .loader-text span {
             display: inline-block;
             opacity: 0;
-            transform: translateY(60px) rotateX(90deg);
-            animation: loaderLetter 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            transform: translateY(110%);
+            animation: loaderSlideUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
         }
 
-        .loader-text span:nth-child(1) { animation-delay: 0.1s; }
-        .loader-text span:nth-child(2) { animation-delay: 0.2s; }
-        .loader-text span:nth-child(3) { animation-delay: 0.3s; }
+        .loader-text span:nth-child(1) { animation-delay: 0.15s; }
+        .loader-text span:nth-child(2) { animation-delay: 0.3s; }
+        .loader-text span:nth-child(3) { animation-delay: 0.45s; }
 
-        @keyframes loaderLetter {
+        @keyframes loaderSlideUp {
             to {
                 opacity: 1;
-                transform: translateY(0) rotateX(0);
+                transform: translateY(0);
             }
+        }
+
+        /* Horizontal dash line that wipes across */
+        .loader-line {
+            width: 0;
+            height: 2px;
+            background: #ffffff;
+            margin-top: 12px;
+            animation: loaderLineWipe 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.7s forwards;
+        }
+
+        @keyframes loaderLineWipe {
+            to { width: clamp(80px, 20vw, 160px); }
+        }
+
+        /* Subtle tagline below line */
+        .loader-sub {
+            font-family: var(--font-body);
+            font-size: 0.75rem;
+            font-weight: 400;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-top: 16px;
+            opacity: 0;
+            animation: loaderFadeIn 0.5s ease 1s forwards;
+        }
+
+        @keyframes loaderFadeIn {
+            to { opacity: 1; }
         }
 
         /* ============================================
@@ -212,11 +257,14 @@
             font-family: var(--font-heading);
             font-size: 1.3rem;
             font-weight: 700;
-            color: var(--text-primary);
-            -webkit-text-fill-color: initial;
+            color: #f5f5f7 !important;
+            -webkit-text-fill-color: #f5f5f7 !important;
             background: none;
             -webkit-background-clip: initial;
             background-clip: initial;
+        }
+        .nav-logo:hover {
+            color: #ffffff !important;
         }
 
         .nav-links {
@@ -1195,7 +1243,7 @@
 
         .chrono-detail {
             position: relative;
-            min-height: 200px;
+            min-height: 220px;
         }
 
         .chrono-card {
@@ -1340,16 +1388,16 @@
             .award-badge { font-size: 0.75rem; padding: 5px 12px; }
 
             /* Chronology */
-            .chrono-track { gap: 4px; padding: 24px 0; margin-bottom: 24px; }
-            .chrono-year { font-size: 0.6rem; }
-            .chrono-dot-wrap { width: 18px; height: 18px; }
-            .chrono-dot-inner { width: 6px; height: 6px; }
-            .chrono-node { gap: 8px; }
-            .chrono-detail { min-height: 180px; }
-            .chrono-card { padding: 24px 20px; }
-            .chrono-card-title { font-size: 1.2rem; }
-            .chrono-card-label { font-size: 0.68rem; }
-            .chrono-card p { font-size: 0.88rem; line-height: 1.7; }
+            .chrono-track { gap: 2px; padding: 20px 0; margin-bottom: 16px; }
+            .chrono-year { font-size: 0.58rem; }
+            .chrono-dot-wrap { width: 16px; height: 16px; }
+            .chrono-dot-inner { width: 5px; height: 5px; }
+            .chrono-node { gap: 6px; }
+            .chrono-detail { min-height: 320px; }
+            .chrono-card { padding: 20px 16px; border-radius: 14px; }
+            .chrono-card-title { font-size: 1.1rem; margin-bottom: 8px; }
+            .chrono-card-label { font-size: 0.65rem; letter-spacing: 1.5px; }
+            .chrono-card p { font-size: 0.82rem; line-height: 1.65; }
 
             /* Projects & Side Hustles */
             .projects-grid { grid-template-columns: 1fr; gap: 16px; }
@@ -1384,9 +1432,10 @@
             .about-stats { grid-template-columns: 1fr; gap: 10px; }
             .stat-card { padding: 16px 12px; }
             .connect-socials { flex-direction: column; align-items: center; }
-            .chrono-year { font-size: 0.55rem; }
+            .chrono-year { font-size: 0.5rem; }
             .chrono-dot-wrap { width: 14px; height: 14px; }
-            .chrono-dot-inner { width: 5px; height: 5px; }
+            .chrono-dot-inner { width: 4px; height: 4px; }
+            .chrono-detail { min-height: 360px; }
             .section-title { font-size: 1.5rem; }
             .btn { padding: 11px 20px; font-size: 0.85rem; }
         }
@@ -1431,8 +1480,12 @@
 
     <!-- LOADING SCREEN -->
     <div class="loader" id="loader">
-        <div class="loader-text">
-            <span style="color:var(--text-primary);">H</span><span style="color:var(--text-primary);">V</span><span style="color:var(--text-primary);">M</span>
+        <div class="loader-logo">
+            <div class="loader-text">
+                <span>H</span><span>V</span><span>M</span>
+            </div>
+            <div class="loader-line"></div>
+            <div class="loader-sub">Builder &middot; Operator</div>
         </div>
     </div>
 
@@ -1955,12 +2008,13 @@
         // ========================================
         const loader = document.getElementById('loader');
         window.addEventListener('load', () => {
+            // Let the logo animation play (H, V, M slide up + line wipe + tagline)
             setTimeout(() => {
-                loader.classList.add('done');
+                loader.classList.add('phase-out');
                 document.body.classList.add('loaded');
                 initHeroLetters();
-            }, 1200);
-            setTimeout(() => loader.remove(), 1800);
+            }, 2000);
+            setTimeout(() => loader.remove(), 3000);
         });
 
         // ========================================
