@@ -1182,6 +1182,53 @@
             transform: scale(1.3);
         }
 
+        .carousel-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+            z-index: 5;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 0;
+        }
+
+        .carousel-nav:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.25);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .carousel-nav svg {
+            width: 20px;
+            height: 20px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .carousel-prev { left: -22px; }
+        .carousel-next { right: -22px; }
+
+        @media (max-width: 768px) {
+            .carousel-prev { left: -8px; }
+            .carousel-next { right: -8px; }
+            .carousel-nav { width: 36px; height: 36px; }
+            .carousel-nav svg { width: 16px; height: 16px; }
+        }
+
         /* ============================================
            CONNECT / FOOTER
            ============================================ */
@@ -2149,6 +2196,12 @@
                 </a>
             </div>
             <div class="testimonial-carousel reveal" id="testimonialCarousel">
+                <button class="carousel-nav carousel-prev" id="carouselPrev" aria-label="Previous testimonials">
+                    <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+                </button>
+                <button class="carousel-nav carousel-next" id="carouselNext" aria-label="Next testimonials">
+                    <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+                </button>
                 <div class="testimonial-track" id="testimonialTrack">
                     <div class="testimonial-slide">
                         <div class="testimonial-card">
@@ -2827,6 +2880,12 @@
                 testimonialCarousel.addEventListener('mouseenter', stopAutoplay);
                 testimonialCarousel.addEventListener('mouseleave', startAutoplay);
             }
+
+            // Arrow navigation
+            const prevBtn = document.getElementById('carouselPrev');
+            const nextBtn = document.getElementById('carouselNext');
+            if (prevBtn) prevBtn.addEventListener('click', () => { stopAutoplay(); goToSlide(currentSlide - 1); startAutoplay(); });
+            if (nextBtn) nextBtn.addEventListener('click', () => { stopAutoplay(); goToSlide(currentSlide + 1); startAutoplay(); });
         }
 
         // ========================================
