@@ -154,6 +154,54 @@
             transform-style: preserve-3d;
         }
 
+        /* Netflix-style multi-color light beams */
+        .loader-logo::before {
+            content: '';
+            position: absolute;
+            width: 140%;
+            height: 250%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scaleX(0);
+            background: repeating-linear-gradient(
+                90deg,
+                transparent 0px,
+                rgba(255, 8, 68, 0.5) 1.5px,
+                transparent 3px,
+                transparent 5px,
+                rgba(255, 107, 53, 0.4) 6.5px,
+                transparent 8px,
+                transparent 10px,
+                rgba(255, 215, 0, 0.35) 11.5px,
+                transparent 13px,
+                transparent 16px,
+                rgba(168, 255, 120, 0.3) 17.5px,
+                transparent 19px,
+                transparent 22px,
+                rgba(100, 210, 255, 0.45) 23.5px,
+                transparent 25px,
+                transparent 28px,
+                rgba(168, 85, 247, 0.4) 29.5px,
+                transparent 31px,
+                transparent 34px,
+                rgba(255, 55, 95, 0.35) 35.5px,
+                transparent 37px,
+                transparent 40px
+            );
+            animation: beamBurst 1.2s cubic-bezier(0.22, 1, 0.36, 1) 2s forwards;
+            opacity: 0;
+            z-index: 1;
+            filter: blur(0.5px);
+            pointer-events: none;
+        }
+
+        @keyframes beamBurst {
+            0% { transform: translate(-50%, -50%) scaleX(0); opacity: 0; }
+            30% { opacity: 0.9; }
+            60% { opacity: 0.7; transform: translate(-50%, -50%) scaleX(1.2); }
+            100% { transform: translate(-50%, -50%) scaleX(1.8); opacity: 0; }
+        }
+
         /* Phase 1: Letters appear and settle */
         /* Phase 2: Everything holds */
         /* Phase 3: DRAMATIC zoom toward camera + fade (Netflix signature) */
@@ -180,24 +228,32 @@
             100% { transform: scale(8) translateZ(200px); }
         }
 
-        /* Subtle ambient glow behind letters */
+        /* Multi-color ambient glow behind letters */
         .loader-glow {
             position: absolute;
-            width: 400px;
-            height: 400px;
+            width: 500px;
+            height: 500px;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 40%, transparent 70%);
+            background: radial-gradient(
+                circle,
+                rgba(255, 8, 68, 0.15) 0%,
+                rgba(255, 107, 53, 0.1) 20%,
+                rgba(255, 215, 0, 0.06) 35%,
+                rgba(100, 210, 255, 0.08) 50%,
+                rgba(168, 85, 247, 0.06) 65%,
+                transparent 80%
+            );
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%) scale(0);
-            animation: glowBuild 1.8s ease-out 0.3s forwards;
+            animation: glowBuild 2s ease-out 0.3s forwards;
             pointer-events: none;
         }
 
         @keyframes glowBuild {
             0% { opacity: 0; transform: translate(-50%, -50%) scale(0); }
             50% { opacity: 1; transform: translate(-50%, -50%) scale(0.9); }
-            100% { opacity: 0.6; transform: translate(-50%, -50%) scale(1); }
+            100% { opacity: 0.7; transform: translate(-50%, -50%) scale(1.1); }
         }
 
         .loader-text {
@@ -205,21 +261,43 @@
             font-size: clamp(6rem, 22vw, 14rem);
             font-weight: 900;
             letter-spacing: -8px;
-            color: #ffffff;
+            /* Multi-toner gradient text */
+            background: linear-gradient(
+                120deg,
+                #ff0844 0%,
+                #ff6b35 14%,
+                #ffd700 28%,
+                #a8ff78 42%,
+                #64d2ff 57%,
+                #a855f7 71%,
+                #ff375f 85%,
+                #ff0844 100%
+            );
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            background-size: 200% 200%;
             position: relative;
             overflow: visible;
             z-index: 2;
             transform-style: preserve-3d;
         }
 
-        /* Each letter: clean fade + scale reveal */
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Each letter: dramatic fade + scale reveal with color glow */
         .loader-text span {
             display: inline-block;
             opacity: 0;
-            animation: letterReveal 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-            text-shadow:
-                0 2px 8px rgba(0, 0, 0, 0.4),
-                0 0 60px rgba(255, 255, 255, 0.08);
+            animation: letterReveal 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards,
+                       gradientShift 3s ease infinite 1.2s;
+            filter: drop-shadow(0 0 30px rgba(255, 8, 68, 0.4))
+                    drop-shadow(0 0 60px rgba(168, 85, 247, 0.2))
+                    drop-shadow(0 0 100px rgba(100, 210, 255, 0.15));
         }
 
         .loader-text span:nth-child(1) { animation-delay: 0.3s; }
@@ -229,34 +307,46 @@
         @keyframes letterReveal {
             0% {
                 opacity: 0;
-                transform: scale(0.6) translateY(20px);
-                filter: blur(12px);
+                transform: scale(0.3) translateY(30px);
+                filter: blur(16px) brightness(0.5);
             }
-            40% {
+            35% {
                 opacity: 1;
-                filter: blur(2px);
+                filter: blur(3px) brightness(1.4);
             }
-            70% {
-                transform: scale(1.02) translateY(-2px);
-                filter: blur(0);
+            60% {
+                transform: scale(1.04) translateY(-3px);
+                filter: blur(0) brightness(1.2);
+            }
+            80% {
+                filter: blur(0) brightness(1);
             }
             100% {
                 opacity: 1;
                 transform: scale(1) translateY(0);
-                filter: blur(0);
+                filter: blur(0) brightness(1);
             }
         }
 
-        /* Subtle horizontal light pass (non-skewed, clean) */
+        /* Multi-color horizontal light sweep */
         .loader-text::after {
             content: '';
             position: absolute;
             top: 0;
             left: -100%;
-            width: 60%;
+            width: 70%;
             height: 100%;
-            background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.06) 40%, rgba(255,255,255,0.12) 50%, rgba(255,255,255,0.06) 60%, transparent 100%);
-            animation: shimmer 1s ease-in-out 2s forwards;
+            background: linear-gradient(
+                90deg,
+                transparent 0%,
+                rgba(255, 8, 68, 0.08) 20%,
+                rgba(255, 215, 0, 0.15) 40%,
+                rgba(255, 255, 255, 0.2) 50%,
+                rgba(100, 210, 255, 0.15) 60%,
+                rgba(168, 85, 247, 0.08) 80%,
+                transparent 100%
+            );
+            animation: shimmer 1.2s ease-in-out 1.8s forwards;
             opacity: 0;
             z-index: 3;
             pointer-events: none;
@@ -267,22 +357,22 @@
             100% { left: 150%; opacity: 0; }
         }
 
-        /* Tagline */
+        /* Tagline — warm spectrum tone */
         .loader-sub {
             font-family: var(--font-body);
             font-size: 0.75rem;
             font-weight: 400;
             letter-spacing: 8px;
             text-transform: uppercase;
-            color: rgba(255, 255, 255, 0);
+            color: rgba(255, 150, 100, 0);
             margin-top: 28px;
             z-index: 2;
             animation: subReveal 1s ease 1.8s forwards;
         }
 
         @keyframes subReveal {
-            0% { color: rgba(255, 255, 255, 0); letter-spacing: 12px; }
-            100% { color: rgba(255, 255, 255, 0.5); letter-spacing: 6px; }
+            0% { color: rgba(255, 150, 100, 0); letter-spacing: 12px; }
+            100% { color: rgba(255, 180, 140, 0.55); letter-spacing: 6px; }
         }
 
         /* ============================================
@@ -1055,42 +1145,6 @@
         .project-link:hover { gap: 10px; }
 
         /* ============================================
-           SKILLS
-           ============================================ */
-        .skills-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-
-        .skill-tag {
-            padding: 12px 24px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 100px;
-            font-size: 0.95rem;
-            font-weight: 500;
-            color: var(--text-secondary);
-            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-            cursor: default;
-            opacity: 0;
-            transform: translateY(20px) scale(0.9);
-        }
-
-        .skill-tag.visible {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-        }
-
-        .skill-tag:hover {
-            border-color: rgba(255, 255, 255, 0.15);
-            color: var(--text-primary);
-            background: rgba(255, 255, 255, 0.05);
-            box-shadow: none;
-            transform: translateY(-2px) scale(1.05);
-        }
-
-        /* ============================================
            TESTIMONIALS
            ============================================ */
         .topmate-stats {
@@ -1637,12 +1691,8 @@
             background: var(--bg-primary);
         }
 
-        #skills {
-            background: var(--bg-secondary);
-        }
-
         #testimonials {
-            background: var(--bg-primary);
+            background: var(--bg-secondary);
         }
 
         /* Hero Metrics Strip */
@@ -1717,8 +1767,8 @@
                 text-align: center;
             }
             @keyframes subReveal {
-                0% { opacity: 0; letter-spacing: 10px; }
-                100% { opacity: 0.7; letter-spacing: 4px; }
+                0% { color: rgba(255, 150, 100, 0); letter-spacing: 10px; }
+                100% { color: rgba(255, 180, 140, 0.55); letter-spacing: 4px; }
             }
 
             /* Hero — compact for mobile */
@@ -1799,9 +1849,6 @@
             .graph-card { padding: 20px 16px; }
             .graph-legend { gap: 16px; }
             .legend-label { font-size: 0.78rem; }
-
-            /* Skills */
-            .skill-tag { padding: 8px 16px; font-size: 0.82rem; }
 
             /* Testimonials carousel */
             .testimonial-slide { min-width: 100% !important; }
@@ -2248,34 +2295,6 @@
         </div>
     </section>
 
-    <!-- SKILLS -->
-    <section id="skills">
-        <div class="container">
-            <div class="reveal">
-                <div class="section-label">Skills & Arsenal</div>
-                <h2 class="section-title">What I bring to the table.</h2>
-                <p class="section-desc">A mix of hard skills, business acumen, and the ability to get things done in chaos.</p>
-            </div>
-            <div class="skills-grid" id="skillsGrid">
-                <span class="skill-tag">Program Management</span>
-                <span class="skill-tag">Business Analytics</span>
-                <span class="skill-tag">P&amp;L Management</span>
-                <span class="skill-tag">Data-Driven Strategy</span>
-                <span class="skill-tag">Scaling Businesses</span>
-                <span class="skill-tag">Product Thinking</span>
-                <span class="skill-tag">Market Share Growth</span>
-                <span class="skill-tag">Cross-functional Leadership</span>
-                <span class="skill-tag">Stakeholder Management</span>
-                <span class="skill-tag">Operations</span>
-                <span class="skill-tag">Project Management</span>
-                <span class="skill-tag">Team Building</span>
-                <span class="skill-tag">Problem Solving</span>
-                <span class="skill-tag">Strategic Planning</span>
-                <span class="skill-tag">Go-to-Market</span>
-            </div>
-        </div>
-    </section>
-
     <!-- TESTIMONIALS -->
     <section id="testimonials">
         <div class="container">
@@ -2499,7 +2518,7 @@
             animateRing();
 
             // Hover detection
-            const hoverTargets = 'a, button, .btn, .project-card, .stat-card, .testimonial-card, .social-icon, .connect-social-link, .skill-tag, .nav-hamburger';
+            const hoverTargets = 'a, button, .btn, .project-card, .stat-card, .testimonial-card, .social-icon, .connect-social-link, .nav-hamburger';
             document.addEventListener('mouseover', e => {
                 if (e.target.closest(hoverTargets)) {
                     dot.classList.add('hover');
@@ -2692,21 +2711,6 @@
         }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
 
         document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
-
-        // Skill tags — staggered cascade
-        const skillsObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const tags = entry.target.querySelectorAll('.skill-tag');
-                    tags.forEach((tag, i) => {
-                        setTimeout(() => tag.classList.add('visible'), i * 60);
-                    });
-                    skillsObserver.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.2 });
-
-        skillsObserver.observe(document.getElementById('skillsGrid'));
 
         // Section title word-by-word reveal
         document.querySelectorAll('.section-title').forEach(title => {
