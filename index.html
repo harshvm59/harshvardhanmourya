@@ -143,7 +143,7 @@
             justify-content: center;
             flex-direction: column;
             overflow: hidden;
-            perspective: 1000px;
+            perspective: 1200px;
         }
 
         .loader-logo {
@@ -158,51 +158,72 @@
         /* Phase 2: Everything holds */
         /* Phase 3: DRAMATIC zoom toward camera + fade (Netflix signature) */
         .loader.phase-zoom {
-            animation: netflixFinalZoom 1.5s cubic-bezier(0.55, 0, 1, 0.45) forwards;
+            animation: netflixFinalZoom 1.5s cubic-bezier(0.32, 0, 0.67, 0) forwards;
         }
 
         @keyframes netflixFinalZoom {
-            0% { opacity: 1; }
-            30% { opacity: 1; }
+            0% { opacity: 1; filter: brightness(1); }
+            15% { opacity: 1; filter: brightness(1.3); }
+            50% { opacity: 0.9; filter: brightness(1); }
             100% {
                 opacity: 0;
+                filter: brightness(0.8);
                 visibility: hidden;
                 pointer-events: none;
             }
         }
 
         .loader.phase-zoom .loader-logo {
-            animation: logoZoomIn 1.5s cubic-bezier(0.55, 0, 1, 0.45) forwards;
+            animation: logoZoomIn 1.5s cubic-bezier(0.32, 0, 0.67, 0) forwards;
         }
 
         @keyframes logoZoomIn {
-            0% { transform: scale(1) translateZ(0); }
-            100% { transform: scale(8) translateZ(200px); }
+            0% { transform: scale(1) translateZ(0); filter: blur(0); }
+            30% { transform: scale(1.8) translateZ(50px); filter: blur(0); }
+            100% { transform: scale(12) translateZ(300px); filter: blur(3px); }
         }
 
-        /* Subtle accent glow behind letters */
+        /* Cinematic blue glow behind letters */
         .loader-glow {
             position: absolute;
-            width: 500px;
-            height: 500px;
+            width: 600px;
+            height: 600px;
             border-radius: 50%;
             background: radial-gradient(
                 circle,
-                rgba(41, 151, 255, 0.1) 0%,
-                rgba(41, 151, 255, 0.04) 40%,
+                rgba(41, 151, 255, 0.15) 0%,
+                rgba(41, 151, 255, 0.06) 35%,
+                rgba(100, 210, 255, 0.02) 55%,
                 transparent 70%
             );
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%) scale(0);
-            animation: glowBuild 1.8s ease-out 0.3s forwards;
+            animation: glowBuild 2.4s cubic-bezier(0.22, 1, 0.36, 1) 0.2s forwards;
             pointer-events: none;
         }
 
         @keyframes glowBuild {
-            0% { opacity: 0; transform: translate(-50%, -50%) scale(0); }
-            50% { opacity: 1; transform: translate(-50%, -50%) scale(0.9); }
-            100% { opacity: 0.7; transform: translate(-50%, -50%) scale(1); }
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0);
+                filter: blur(40px);
+            }
+            40% {
+                opacity: 0.8;
+                transform: translate(-50%, -50%) scale(0.85);
+                filter: blur(20px);
+            }
+            70% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1.05);
+                filter: blur(10px);
+            }
+            100% {
+                opacity: 0.6;
+                transform: translate(-50%, -50%) scale(1);
+                filter: blur(15px);
+            }
         }
 
         .loader-text {
@@ -215,62 +236,95 @@
             overflow: visible;
             z-index: 2;
             transform-style: preserve-3d;
+            animation: textBreathe 2s ease-in-out 2.6s 1 forwards;
         }
 
-        /* Each letter: clean fade + scale reveal */
+        /* Hero-moment breathing pulse after letters settle */
+        @keyframes textBreathe {
+            0% {
+                filter: brightness(1) drop-shadow(0 0 0px rgba(41, 151, 255, 0));
+            }
+            50% {
+                filter: brightness(1.08) drop-shadow(0 0 30px rgba(41, 151, 255, 0.2));
+            }
+            100% {
+                filter: brightness(1) drop-shadow(0 0 0px rgba(41, 151, 255, 0));
+            }
+        }
+
+        /* Each letter: dramatic forge entrance */
         .loader-text span {
             display: inline-block;
             opacity: 0;
-            animation: letterReveal 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            animation: letterReveal 1.0s cubic-bezier(0.16, 1, 0.3, 1) forwards;
             text-shadow:
-                0 0 40px rgba(41, 151, 255, 0.3),
-                0 0 80px rgba(41, 151, 255, 0.1),
-                0 2px 8px rgba(0, 0, 0, 0.4);
+                0 0 60px rgba(41, 151, 255, 0.4),
+                0 0 120px rgba(41, 151, 255, 0.15),
+                0 4px 12px rgba(0, 0, 0, 0.6);
+            will-change: transform, opacity, filter;
         }
 
-        .loader-text span:nth-child(1) { animation-delay: 0.3s; }
-        .loader-text span:nth-child(2) { animation-delay: 0.6s; }
-        .loader-text span:nth-child(3) { animation-delay: 0.9s; }
+        .loader-text span:nth-child(1) { animation-delay: 0.4s; }
+        .loader-text span:nth-child(2) { animation-delay: 0.9s; }
+        .loader-text span:nth-child(3) { animation-delay: 1.4s; }
 
         @keyframes letterReveal {
             0% {
                 opacity: 0;
-                transform: scale(0.6) translateY(20px);
-                filter: blur(12px);
+                transform: scale(0.4) translateY(40px);
+                filter: blur(20px) brightness(0.3);
             }
-            40% {
+            15% {
+                opacity: 0.6;
+                transform: scale(1.15) translateY(-8px);
+                filter: blur(4px) brightness(1.8);
+            }
+            35% {
                 opacity: 1;
-                filter: blur(2px);
+                transform: scale(0.98) translateY(2px);
+                filter: blur(0) brightness(1.2);
             }
-            70% {
-                transform: scale(1.02) translateY(-2px);
-                filter: blur(0);
+            60% {
+                transform: scale(1.01) translateY(-1px);
+                filter: blur(0) brightness(1.05);
             }
             100% {
                 opacity: 1;
                 transform: scale(1) translateY(0);
-                filter: blur(0);
+                filter: blur(0) brightness(1);
             }
         }
 
-        /* Subtle horizontal light pass */
+        /* Blue-tinted angled shimmer sweep */
         .loader-text::after {
             content: '';
             position: absolute;
-            top: 0;
-            left: -100%;
-            width: 60%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.06) 40%, rgba(255,255,255,0.12) 50%, rgba(255,255,255,0.06) 60%, transparent 100%);
-            animation: shimmer 1s ease-in-out 2s forwards;
+            top: -20%;
+            left: -120%;
+            width: 70%;
+            height: 140%;
+            background: linear-gradient(
+                90deg,
+                transparent 0%,
+                rgba(41, 151, 255, 0.03) 30%,
+                rgba(255, 255, 255, 0.08) 45%,
+                rgba(255, 255, 255, 0.15) 50%,
+                rgba(255, 255, 255, 0.08) 55%,
+                rgba(41, 151, 255, 0.03) 70%,
+                transparent 100%
+            );
+            animation: shimmer 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 2.6s forwards;
             opacity: 0;
             z-index: 3;
             pointer-events: none;
+            transform: skewX(-15deg);
         }
 
         @keyframes shimmer {
-            0% { left: -100%; opacity: 1; }
-            100% { left: 150%; opacity: 0; }
+            0% { left: -120%; opacity: 0; }
+            10% { opacity: 1; }
+            85% { opacity: 1; }
+            100% { left: 160%; opacity: 0; }
         }
 
         /* Tagline */
@@ -281,14 +335,15 @@
             letter-spacing: 8px;
             text-transform: uppercase;
             color: rgba(255, 255, 255, 0);
-            margin-top: 28px;
+            margin-top: 32px;
             z-index: 2;
-            animation: subReveal 1s ease 1.8s forwards;
+            animation: subReveal 1.2s cubic-bezier(0.22, 1, 0.36, 1) 2.4s forwards;
         }
 
         @keyframes subReveal {
-            0% { color: rgba(255, 255, 255, 0); letter-spacing: 12px; }
-            100% { color: rgba(255, 255, 255, 0.5); letter-spacing: 6px; }
+            0% { color: rgba(255, 255, 255, 0); letter-spacing: 14px; filter: blur(4px); }
+            60% { filter: blur(0); }
+            100% { color: rgba(255, 255, 255, 0.45); letter-spacing: 6px; filter: blur(0); }
         }
 
         /* ============================================
@@ -1675,16 +1730,23 @@
 
             /* Loader — fix overflow on mobile */
             .loader-text { letter-spacing: -4px; }
+            .loader-glow { width: 350px; height: 350px; }
             .loader-sub {
                 letter-spacing: 6px;
                 font-size: 0.65rem;
-                margin-top: 16px;
+                margin-top: 20px;
                 padding: 0 16px;
                 text-align: center;
             }
             @keyframes subReveal {
-                0% { color: rgba(255, 255, 255, 0); letter-spacing: 10px; }
-                100% { color: rgba(255, 255, 255, 0.5); letter-spacing: 4px; }
+                0% { color: rgba(255, 255, 255, 0); letter-spacing: 10px; filter: blur(4px); }
+                60% { filter: blur(0); }
+                100% { color: rgba(255, 255, 255, 0.45); letter-spacing: 4px; filter: blur(0); }
+            }
+            @keyframes logoZoomIn {
+                0% { transform: scale(1) translateZ(0); filter: blur(0); }
+                30% { transform: scale(1.5) translateZ(30px); filter: blur(0); }
+                100% { transform: scale(8) translateZ(150px); filter: blur(2px); }
             }
 
             /* Hero — compact for mobile */
@@ -2378,8 +2440,8 @@
                 loader.classList.add('phase-zoom');
                 document.body.classList.add('loaded');
                 initHeroLetters();
-            }, 3000);
-            setTimeout(() => loader.remove(), 4500);
+            }, 3800);
+            setTimeout(() => loader.remove(), 5500);
         });
 
         // ========================================
