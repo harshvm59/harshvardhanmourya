@@ -158,48 +158,48 @@
         .loader-logo::before {
             content: '';
             position: absolute;
-            width: 140%;
-            height: 250%;
+            width: 160%;
+            height: 300%;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%) scaleX(0);
             background: repeating-linear-gradient(
                 90deg,
                 transparent 0px,
-                rgba(255, 8, 68, 0.5) 1.5px,
-                transparent 3px,
-                transparent 5px,
-                rgba(255, 107, 53, 0.4) 6.5px,
-                transparent 8px,
-                transparent 10px,
-                rgba(255, 215, 0, 0.35) 11.5px,
-                transparent 13px,
-                transparent 16px,
-                rgba(168, 255, 120, 0.3) 17.5px,
-                transparent 19px,
-                transparent 22px,
-                rgba(100, 210, 255, 0.45) 23.5px,
-                transparent 25px,
-                transparent 28px,
-                rgba(168, 85, 247, 0.4) 29.5px,
-                transparent 31px,
-                transparent 34px,
-                rgba(255, 55, 95, 0.35) 35.5px,
-                transparent 37px,
-                transparent 40px
+                rgba(255, 68, 102, 0.7) 1.5px,
+                transparent 3.5px,
+                transparent 6px,
+                rgba(255, 140, 50, 0.6) 7.5px,
+                transparent 9.5px,
+                transparent 12px,
+                rgba(255, 215, 0, 0.55) 13.5px,
+                transparent 15.5px,
+                transparent 18px,
+                rgba(120, 255, 150, 0.5) 19.5px,
+                transparent 21.5px,
+                transparent 24px,
+                rgba(100, 210, 255, 0.65) 25.5px,
+                transparent 27.5px,
+                transparent 30px,
+                rgba(168, 85, 247, 0.6) 31.5px,
+                transparent 33.5px,
+                transparent 36px,
+                rgba(255, 55, 135, 0.55) 37.5px,
+                transparent 39.5px,
+                transparent 42px
             );
-            animation: beamBurst 1.2s cubic-bezier(0.22, 1, 0.36, 1) 2s forwards;
+            animation: beamBurst 1.4s cubic-bezier(0.22, 1, 0.36, 1) 2s forwards;
             opacity: 0;
             z-index: 1;
-            filter: blur(0.5px);
+            filter: blur(0.8px);
             pointer-events: none;
         }
 
         @keyframes beamBurst {
             0% { transform: translate(-50%, -50%) scaleX(0); opacity: 0; }
-            30% { opacity: 0.9; }
-            60% { opacity: 0.7; transform: translate(-50%, -50%) scaleX(1.2); }
-            100% { transform: translate(-50%, -50%) scaleX(1.8); opacity: 0; }
+            25% { opacity: 1; }
+            50% { opacity: 0.85; transform: translate(-50%, -50%) scaleX(1.2); }
+            100% { transform: translate(-50%, -50%) scaleX(2); opacity: 0; }
         }
 
         /* Phase 1: Letters appear and settle */
@@ -231,16 +231,15 @@
         /* Multi-color ambient glow behind letters */
         .loader-glow {
             position: absolute;
-            width: 500px;
-            height: 500px;
+            width: 600px;
+            height: 600px;
             border-radius: 50%;
             background: radial-gradient(
                 circle,
-                rgba(255, 8, 68, 0.15) 0%,
-                rgba(255, 107, 53, 0.1) 20%,
-                rgba(255, 215, 0, 0.06) 35%,
-                rgba(100, 210, 255, 0.08) 50%,
-                rgba(168, 85, 247, 0.06) 65%,
+                rgba(255, 68, 102, 0.25) 0%,
+                rgba(255, 107, 53, 0.18) 20%,
+                rgba(100, 210, 255, 0.15) 40%,
+                rgba(168, 85, 247, 0.12) 60%,
                 transparent 80%
             );
             top: 50%;
@@ -253,7 +252,7 @@
         @keyframes glowBuild {
             0% { opacity: 0; transform: translate(-50%, -50%) scale(0); }
             50% { opacity: 1; transform: translate(-50%, -50%) scale(0.9); }
-            100% { opacity: 0.7; transform: translate(-50%, -50%) scale(1.1); }
+            100% { opacity: 0.85; transform: translate(-50%, -50%) scale(1.1); }
         }
 
         .loader-text {
@@ -261,48 +260,52 @@
             font-size: clamp(6rem, 22vw, 14rem);
             font-weight: 900;
             letter-spacing: -8px;
-            /* Multi-toner gradient text */
-            background: linear-gradient(
-                120deg,
-                #ff0844 0%,
-                #ff6b35 14%,
-                #ffd700 28%,
-                #a8ff78 42%,
-                #64d2ff 57%,
-                #a855f7 71%,
-                #ff375f 85%,
-                #ff0844 100%
-            );
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            background-size: 200% 200%;
+            color: #ffffff;
             position: relative;
             overflow: visible;
             z-index: 2;
             transform-style: preserve-3d;
         }
 
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        /* Each letter: dramatic fade + scale reveal with color glow */
+        /* Each letter gets its own gradient color */
         .loader-text span {
             display: inline-block;
             opacity: 0;
-            animation: letterReveal 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards,
-                       gradientShift 3s ease infinite 1.2s;
-            filter: drop-shadow(0 0 30px rgba(255, 8, 68, 0.4))
-                    drop-shadow(0 0 60px rgba(168, 85, 247, 0.2))
-                    drop-shadow(0 0 100px rgba(100, 210, 255, 0.15));
+            animation: letterReveal 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
         }
 
-        .loader-text span:nth-child(1) { animation-delay: 0.3s; }
-        .loader-text span:nth-child(2) { animation-delay: 0.6s; }
-        .loader-text span:nth-child(3) { animation-delay: 0.9s; }
+        /* H = warm (red → orange → gold) */
+        .loader-text span:nth-child(1) {
+            animation-delay: 0.3s;
+            color: #ff4466;
+            text-shadow:
+                0 0 20px rgba(255, 68, 102, 0.8),
+                0 0 60px rgba(255, 68, 102, 0.4),
+                0 0 120px rgba(255, 107, 53, 0.3),
+                0 2px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        /* V = cool (sky blue → cyan) */
+        .loader-text span:nth-child(2) {
+            animation-delay: 0.6s;
+            color: #64d2ff;
+            text-shadow:
+                0 0 20px rgba(100, 210, 255, 0.8),
+                0 0 60px rgba(100, 210, 255, 0.4),
+                0 0 120px rgba(41, 151, 255, 0.3),
+                0 2px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        /* M = electric (purple → magenta) */
+        .loader-text span:nth-child(3) {
+            animation-delay: 0.9s;
+            color: #a855f7;
+            text-shadow:
+                0 0 20px rgba(168, 85, 247, 0.8),
+                0 0 60px rgba(168, 85, 247, 0.4),
+                0 0 120px rgba(255, 55, 95, 0.3),
+                0 2px 8px rgba(0, 0, 0, 0.5);
+        }
 
         @keyframes letterReveal {
             0% {
@@ -312,7 +315,7 @@
             }
             35% {
                 opacity: 1;
-                filter: blur(3px) brightness(1.4);
+                filter: blur(3px) brightness(1.5);
             }
             60% {
                 transform: scale(1.04) translateY(-3px);
