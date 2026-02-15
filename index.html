@@ -158,30 +158,25 @@
         /* Phase 2: Everything holds */
         /* Phase 3: DRAMATIC zoom toward camera + fade (Netflix signature) */
         .loader.phase-zoom {
-            animation: netflixFinalZoom 1.5s cubic-bezier(0.32, 0, 0.67, 0) forwards;
+            animation: netflixFinalZoom 1.2s ease-out forwards;
         }
 
         @keyframes netflixFinalZoom {
-            0% { opacity: 1; filter: brightness(1); }
-            10% { opacity: 1; filter: brightness(1.2); }
-            40% { opacity: 0.8; filter: brightness(1); }
-            70% { opacity: 0.4; filter: brightness(0.9); }
+            0% { opacity: 1; }
             100% {
                 opacity: 0;
-                filter: brightness(0.8);
                 visibility: hidden;
                 pointer-events: none;
             }
         }
 
         .loader.phase-zoom .loader-logo {
-            animation: logoZoomIn 1.5s cubic-bezier(0.32, 0, 0.67, 0) forwards;
+            animation: logoZoomIn 1.2s ease-out forwards;
         }
 
         @keyframes logoZoomIn {
-            0% { transform: scale(1) translateZ(0); filter: blur(0); }
-            30% { transform: scale(1.8) translateZ(50px); filter: blur(0); }
-            100% { transform: scale(12) translateZ(300px); filter: blur(3px); }
+            0% { transform: scale(1) translateZ(0); }
+            100% { transform: scale(8) translateZ(200px); filter: blur(2px); }
         }
 
         /* Cinematic blue glow behind letters */
@@ -504,6 +499,12 @@
             align-items: center;
             position: relative;
             overflow: hidden;
+            opacity: 0;
+            transition: opacity 0.8s ease;
+        }
+
+        body.loaded .hero {
+            opacity: 1;
         }
 
         .hero::after {
@@ -1115,6 +1116,52 @@
         }
 
         .project-link:hover { gap: 10px; }
+
+        /* Portfolio Dropdown */
+        .portfolio-dropdown { margin-top: 16px; }
+
+        .portfolio-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 10px 16px;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            font-family: var(--font-body);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .portfolio-toggle:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text-primary);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .portfolio-toggle svg {
+            transition: transform 0.3s ease;
+        }
+
+        .portfolio-dropdown.open .portfolio-toggle svg {
+            transform: rotate(180deg);
+        }
+
+        .portfolio-dropdown-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            padding: 0;
+        }
+
+        .portfolio-dropdown.open .portfolio-dropdown-content {
+            max-height: 100px;
+            padding: 12px 0 0;
+        }
 
         /* ============================================
            TESTIMONIALS
@@ -1745,9 +1792,8 @@
                 100% { color: rgba(255, 255, 255, 0.45); letter-spacing: 4px; filter: blur(0); }
             }
             @keyframes logoZoomIn {
-                0% { transform: scale(1) translateZ(0); filter: blur(0); }
-                30% { transform: scale(1.5) translateZ(30px); filter: blur(0); }
-                100% { transform: scale(8) translateZ(150px); filter: blur(2px); }
+                0% { transform: scale(1) translateZ(0); }
+                100% { transform: scale(6) translateZ(100px); filter: blur(2px); }
             }
 
             /* Hero — compact for mobile */
@@ -2216,6 +2262,18 @@
                         <span class="timeline-tag">Self-Researched</span>
                         <span class="timeline-tag">Global Markets</span>
                     </div>
+                    <div class="portfolio-dropdown">
+                        <button class="portfolio-toggle" onclick="this.parentElement.classList.toggle('open')">
+                            View Portfolio Breakdown
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </button>
+                        <div class="portfolio-dropdown-content">
+                            <a href="https://docs.google.com/spreadsheets/d/1NMr6Uz5lsGW09azeFRElWBZtku463w_R/edit?gid=309291468#gid=309291468" target="_blank" rel="noopener" class="project-link">
+                                Open Google Sheet
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17l9.2-9.2M7 7h10v10"/></svg>
+                            </a>
+                        </div>
+                    </div>
                 </div>
                 <div class="project-card tilt-card reveal">
                     <div class="tilt-shine"></div>
@@ -2242,6 +2300,18 @@
                 <p class="section-desc">From race cars to podcasts to mentoring &mdash; building never stops.</p>
             </div>
             <div class="projects-grid">
+                <div class="project-card tilt-card reveal">
+                    <div class="tilt-shine"></div>
+                    <div class="project-icon" style="background:rgba(255,255,255,0.06);">&#129302;</div>
+                    <h3>This Website &mdash; AI Built</h3>
+                    <p>
+                        This entire portfolio was built using AI (Claude Code) &mdash; from the cinematic HVM loader to every section, animation, and interaction. Zero templates, zero frameworks, pure HTML/CSS/JS.
+                    </p>
+                    <a href="https://harshvm59.github.io/harshvardhanmourya/" target="_blank" rel="noopener" class="project-link">
+                        You're looking at it
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17l9.2-9.2M7 7h10v10"/></svg>
+                    </a>
+                </div>
                 <div class="project-card tilt-card reveal">
                     <div class="tilt-shine"></div>
                     <div class="project-icon racing">&#127946;</div>
@@ -2442,7 +2512,7 @@
                 document.body.classList.add('loaded');
                 initHeroLetters();
             }, 2800);
-            setTimeout(() => loader.remove(), 4300);
+            setTimeout(() => loader.remove(), 4000);
         });
 
         // ========================================
