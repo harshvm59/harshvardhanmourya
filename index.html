@@ -1026,6 +1026,11 @@
             gap: 24px;
         }
 
+        /* Side Hustles grid — don't stretch cards to equal height, let each breathe */
+        #sidehustles .projects-grid {
+            align-items: start;
+        }
+
         .project-card {
             padding: 36px;
             background: rgba(255, 255, 255, 0.05);
@@ -1033,7 +1038,7 @@
             border-radius: 20px;
             transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
             position: relative;
-            overflow: hidden;
+            overflow: visible;
             transform-style: preserve-3d;
             will-change: transform;
         }
@@ -1048,6 +1053,7 @@
             background: rgba(255, 255, 255, 0.3);
             opacity: 0;
             transition: opacity 0.4s;
+            border-radius: 20px 20px 0 0;
         }
 
         .project-card:hover {
@@ -1057,6 +1063,38 @@
 
         .project-card:hover::before { opacity: 1; }
 
+        /* Golden featured card — shipped product highlight */
+        .project-card.golden-card {
+            border: 1px solid rgba(255, 195, 0, 0.3);
+            background: linear-gradient(135deg, rgba(255, 195, 0, 0.06) 0%, rgba(255, 255, 255, 0.03) 100%);
+            box-shadow: 0 0 20px rgba(255, 195, 0, 0.08), inset 0 0 20px rgba(255, 195, 0, 0.03);
+        }
+
+        .project-card.golden-card:hover {
+            border-color: rgba(255, 195, 0, 0.45);
+            box-shadow: 0 0 30px rgba(255, 195, 0, 0.12), inset 0 0 30px rgba(255, 195, 0, 0.04);
+        }
+
+        .project-card.golden-card::before {
+            background: linear-gradient(90deg, transparent, rgba(255, 195, 0, 0.6), transparent);
+            opacity: 1;
+        }
+
+        /* Flagship golden card — big fat golden border, unmissable */
+        .project-card.flagship-card {
+            border: 2px solid rgba(255, 195, 0, 0.5) !important;
+            box-shadow: 0 0 30px rgba(255, 195, 0, 0.15), 0 0 60px rgba(255, 195, 0, 0.05), inset 0 0 30px rgba(255, 195, 0, 0.04) !important;
+        }
+        .project-card.flagship-card:hover {
+            border-color: rgba(255, 195, 0, 0.7) !important;
+            box-shadow: 0 0 40px rgba(255, 195, 0, 0.25), 0 0 80px rgba(255, 195, 0, 0.08), inset 0 0 40px rgba(255, 195, 0, 0.06) !important;
+        }
+        .project-card.flagship-card::before {
+            height: 4px;
+            background: linear-gradient(90deg, transparent, rgba(255, 195, 0, 0.9), rgba(255, 195, 0, 0.6), transparent) !important;
+            opacity: 1 !important;
+        }
+
         /* Tilt shine effect */
         .project-card .tilt-shine {
             position: absolute;
@@ -1065,6 +1103,7 @@
             pointer-events: none;
             opacity: 0;
             transition: opacity 0.3s;
+            border-radius: 20px;
         }
 
         .project-card:hover .tilt-shine { opacity: 1; }
@@ -1472,15 +1511,16 @@
         }
 
         .chrono-dot-wrap {
-            width: 24px;
-            height: 24px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
-            background: var(--bg-primary);
+            background: rgba(255, 255, 255, 0.04);
             border: 2px solid rgba(255, 255, 255, 0.12);
             display: flex;
             align-items: center;
             justify-content: center;
             transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            overflow: hidden;
         }
 
         .chrono-dot-inner {
@@ -1491,17 +1531,65 @@
             transition: all 0.4s;
         }
 
+        /* Timeline logo images */
+        .chrono-logo {
+            width: 26px;
+            height: 26px;
+            object-fit: contain;
+            opacity: 0.5;
+            transition: all 0.4s;
+            border-radius: 0;
+        }
+        .chrono-logo.invert { filter: brightness(0) invert(1); }
+        .chrono-logo-svg {
+            width: 22px;
+            height: 22px;
+            opacity: 0.5;
+            transition: all 0.4s;
+        }
+        .chrono-logo-svg path,
+        .chrono-logo-svg rect,
+        .chrono-logo-svg circle { transition: fill 0.4s; }
+
         .chrono-node:hover .chrono-dot-wrap,
         .chrono-node.active .chrono-dot-wrap {
             border-color: rgba(255, 255, 255, 0.4);
-            box-shadow: none;
-            transform: scale(1.3);
+            box-shadow: 0 0 16px rgba(255, 255, 255, 0.08);
+            transform: scale(1.25);
         }
 
         .chrono-node:hover .chrono-dot-inner,
         .chrono-node.active .chrono-dot-inner {
             background: var(--text-primary);
             box-shadow: none;
+        }
+
+        .chrono-node:hover .chrono-logo,
+        .chrono-node.active .chrono-logo {
+            opacity: 1;
+        }
+        .chrono-node:hover .chrono-logo-svg,
+        .chrono-node.active .chrono-logo-svg {
+            opacity: 1;
+        }
+
+        /* Zomato red Z glow on active */
+        .chrono-node[data-era="zomato"]:hover .chrono-dot-wrap,
+        .chrono-node[data-era="zomato"].active .chrono-dot-wrap {
+            border-color: rgba(230, 62, 62, 0.5);
+            box-shadow: 0 0 20px rgba(230, 62, 62, 0.15);
+        }
+        /* UC purple glow */
+        .chrono-node[data-era="uc"]:hover .chrono-dot-wrap,
+        .chrono-node[data-era="uc"].active .chrono-dot-wrap {
+            border-color: rgba(100, 100, 100, 0.5);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+        }
+        /* Now golden glow */
+        .chrono-node[data-era="now"]:hover .chrono-dot-wrap,
+        .chrono-node[data-era="now"].active .chrono-dot-wrap {
+            border-color: rgba(255, 195, 0, 0.5);
+            box-shadow: 0 0 20px rgba(255, 195, 0, 0.15);
         }
 
         .chrono-node.active .chrono-dot-inner {
@@ -1853,8 +1941,10 @@
             /* Chronology */
             .chrono-track { gap: 2px; padding: 20px 0; margin-bottom: 16px; }
             .chrono-year { font-size: 0.58rem; }
-            .chrono-dot-wrap { width: 16px; height: 16px; }
+            .chrono-dot-wrap { width: 30px; height: 30px; }
             .chrono-dot-inner { width: 5px; height: 5px; }
+            .chrono-logo { width: 18px; height: 18px; }
+            .chrono-logo-svg { width: 16px; height: 16px; }
             .chrono-node { gap: 6px; }
             .chrono-detail { min-height: 320px; }
             .chrono-card { padding: 20px 16px; border-radius: 14px; }
@@ -2131,27 +2221,39 @@
                     <div class="chrono-line-fill" id="chronoFill"></div>
 
                     <div class="chrono-node" data-year="2014" data-era="nit">
-                        <div class="chrono-dot-wrap"><div class="chrono-dot-inner"></div></div>
+                        <div class="chrono-dot-wrap">
+                            <img src="logos/nitraipur.png" alt="NIT Raipur" class="chrono-logo invert">
+                        </div>
                         <div class="chrono-year">2014</div>
                     </div>
                     <div class="chrono-node" data-year="2016" data-era="hustle">
-                        <div class="chrono-dot-wrap"><div class="chrono-dot-inner"></div></div>
+                        <div class="chrono-dot-wrap">
+                            <svg class="chrono-logo-svg" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>
+                        </div>
                         <div class="chrono-year">2016</div>
                     </div>
                     <div class="chrono-node" data-year="2018" data-era="b2b">
-                        <div class="chrono-dot-wrap"><div class="chrono-dot-inner"></div></div>
+                        <div class="chrono-dot-wrap">
+                            <svg class="chrono-logo-svg" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                        </div>
                         <div class="chrono-year">2018</div>
                     </div>
                     <div class="chrono-node" data-year="2019" data-era="uc">
-                        <div class="chrono-dot-wrap"><div class="chrono-dot-inner"></div></div>
+                        <div class="chrono-dot-wrap">
+                            <img src="logos/uc_square.png" alt="Urban Company" class="chrono-logo" style="width:30px;height:30px;border-radius:6px;">
+                        </div>
                         <div class="chrono-year">2019</div>
                     </div>
                     <div class="chrono-node" data-year="2022" data-era="zomato">
-                        <div class="chrono-dot-wrap"><div class="chrono-dot-inner"></div></div>
+                        <div class="chrono-dot-wrap">
+                            <img src="logos/zomato_icon.png" alt="Zomato" class="chrono-logo" style="border-radius:4px;">
+                        </div>
                         <div class="chrono-year">2022</div>
                     </div>
                     <div class="chrono-node active" data-year="2025" data-era="now">
-                        <div class="chrono-dot-wrap"><div class="chrono-dot-inner"></div></div>
+                        <div class="chrono-dot-wrap" style="border-color:rgba(255,195,0,0.3);">
+                            <svg class="chrono-logo-svg" viewBox="0 0 24 24" fill="rgba(255,195,0,0.8)" stroke="none"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                        </div>
                         <div class="chrono-year">Now</div>
                     </div>
                 </div>
@@ -2275,21 +2377,27 @@
                         </div>
                     </div>
                 </div>
-                <div class="project-card tilt-card reveal">
+                <div class="project-card tilt-card reveal golden-card flagship-card">
                     <div class="tilt-shine"></div>
-                    <div class="project-icon" style="background:rgba(255,255,255,0.06);">&#129302;</div>
+                    <div class="project-icon" style="background:rgba(255,195,0,0.10);">&#129302;</div>
                     <h3>AI Tools Builder</h3>
-                    <div class="project-metric" style="color:#ff9f0a;">In Progress</div>
-                    <p>Currently building and shipping AI tools. On a mission to become a true generalist &mdash; someone who can take an idea from zero to one, regardless of the domain. The future belongs to builders.</p>
-                    <div class="timeline-tags" style="margin-top:16px;">
+                    <div class="project-metric" style="color:#ffc300;">Shipping &amp; Building</div>
+                    <p>Building AI tools &amp; shipping products. Zero to one, any domain. The future belongs to builders.</p>
+                    <div class="timeline-tags" style="margin-top:12px;">
                         <span class="timeline-tag">AI / LLMs</span>
                         <span class="timeline-tag">Generalist Builder</span>
                         <span class="timeline-tag">0 &rarr; 1</span>
                     </div>
-                    <a href="https://harshvm59.github.io/harshvardhanmourya/" target="_blank" rel="noopener" class="project-link" style="margin-top:16px;">
-                        See: This Website (AI Built)
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17l9.2-9.2M7 7h10v10"/></svg>
-                    </a>
+                    <div style="display:flex;flex-direction:column;gap:8px;margin-top:14px;">
+                        <a href="https://harshvm59.github.io/harshvardhanmourya/" target="_blank" rel="noopener" class="project-link" style="margin-top:0;">
+                            See: This Website (AI Built)
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17l9.2-9.2M7 7h10v10"/></svg>
+                        </a>
+                        <a href="https://harshvm59.github.io/vault-by-hvm/" target="_blank" rel="noopener" class="project-link" style="margin-top:0;border:1px solid rgba(255,195,0,0.3);background:rgba(255,195,0,0.06);">
+                            &#128176; Vault by HVM (Finance Tracker)
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17l9.2-9.2M7 7h10v10"/></svg>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -2313,6 +2421,18 @@
                     </p>
                     <a href="https://harshvm59.github.io/harshvardhanmourya/" target="_blank" rel="noopener" class="project-link">
                         You're looking at it
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17l9.2-9.2M7 7h10v10"/></svg>
+                    </a>
+                </div>
+                <div class="project-card tilt-card reveal golden-card">
+                    <div class="tilt-shine"></div>
+                    <div class="project-icon" style="background:rgba(255,195,0,0.10);">&#128176;</div>
+                    <h3>Vault by HVM &mdash; Finance Tracker</h3>
+                    <p>
+                        A personal finance tracker I built to manage expenses, track savings, and visualize spending patterns. Clean UI, smart categorization, and full control over your money data.
+                    </p>
+                    <a href="https://harshvm59.github.io/vault-by-hvm/" target="_blank" rel="noopener" class="project-link">
+                        Try Vault
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17l9.2-9.2M7 7h10v10"/></svg>
                     </a>
                 </div>
