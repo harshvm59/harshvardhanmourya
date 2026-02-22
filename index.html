@@ -1884,7 +1884,7 @@
         }
         .logos-track {
             display: flex;
-            gap: 56px;
+            gap: 20px;
             align-items: center;
             animation: logoScroll 22s linear infinite;
             width: max-content;
@@ -1896,26 +1896,29 @@
         .logo-chip {
             display: flex;
             align-items: center;
-            gap: 12px;
-            opacity: 0.45;
-            transition: opacity 0.3s;
+            gap: 10px;
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 10px 20px;
+            opacity: 0.75;
+            transition: opacity 0.3s, transform 0.25s;
             white-space: nowrap;
         }
         .logo-chip:hover {
-            opacity: 0.9;
+            opacity: 1;
+            transform: translateY(-2px);
         }
         .logo-chip img {
-            height: 28px;
+            height: 26px;
             width: auto;
             object-fit: contain;
-            filter: invert(1) grayscale(1);
         }
         .logo-chip span {
             font-family: var(--font-heading);
-            font-weight: 600;
-            font-size: 0.9rem;
-            letter-spacing: 0.04em;
-            color: var(--text-secondary);
+            font-weight: 700;
+            font-size: 0.85rem;
+            letter-spacing: 0.03em;
+            color: #111;
         }
 
         /* ============================================
