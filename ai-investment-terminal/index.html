@@ -318,6 +318,7 @@ footer a{color:var(--gold);text-decoration:underline}
   <a href="https://harshvm59.github.io/harshvardhanmourya/" target="_blank">harshvardhanmourya.github.io</a>
 </footer>
 
+<script src="./data/data.js"></script>
 <script>
 const PORTFOLIO = ["NVDA","TSLA","META","TSM","GOOGL","PLTR","CRWD","AMD","MU","AVGO","VRT","ASML","CEG","ANET","MSFT","AMZN"];
 let appData = null;
@@ -344,6 +345,13 @@ function daysAgo(str){
 
 // ── FETCH DATA ──
 async function loadData(){
+  // window.__DATA__ is set by data/data.js (works on file:// without a server)
+  if(window.__DATA__){
+    appData=window.__DATA__;
+    document.getElementById('loading').style.display='none';
+    render();
+    return;
+  }
   try{
     const r=await fetch('./data/data.json?v='+Date.now());
     if(!r.ok)throw new Error('HTTP '+r.status);

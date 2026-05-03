@@ -627,11 +627,18 @@ def main():
     print("\n📦 Assembling data.json...")
     output = build_output(stock_data, market_summary, theme_yt, key_voice_videos, articles, PORTFOLIO_STOCKS)
 
-    # Write file
+    # Write data.json
     out_path = Path(__file__).parent / "data" / "data.json"
     out_path.parent.mkdir(exist_ok=True)
     with open(out_path, "w") as f:
         json.dump(output, f, indent=2, default=str)
+
+    # Write data.js (allows HTML to open via file:// without a local server)
+    js_path = Path(__file__).parent / "data" / "data.js"
+    with open(js_path, "w") as f:
+        f.write("window.__DATA__ = ")
+        json.dump(output, f, default=str)
+        f.write(";")
 
     total_videos = sum(len(t["youtube_videos"]) for t in output["themes"])
     print(f"\n✅ Done. Updated {len(output['themes'])} themes, {len(stock_data)} stocks, {total_videos} theme videos + {len(key_voice_videos)} key voice videos.")
