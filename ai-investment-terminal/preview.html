@@ -650,15 +650,12 @@ const getCost   = t => parseFloat(localStorage.getItem('cost_'+t)||'0');
 ════════════════════════════════════════════ */
 function switchTab(tab){
   document.body.dataset.tab = tab;
-  document.getElementById('tab-themes').classList.toggle('active', tab==='themes');
-  document.getElementById('tab-portfolio').classList.toggle('active', tab==='portfolio');
+  document.getElementById('tab-themes').style.display    = tab==='themes'    ? 'block' : 'none';
+  document.getElementById('tab-portfolio').style.display = tab==='portfolio' ? 'block' : 'none';
   document.getElementById('btn-themes').classList.toggle('active', tab==='themes');
   document.getElementById('btn-portfolio').classList.toggle('active', tab==='portfolio');
   history.replaceState(null,'','#'+tab);
-  if(tab==='portfolio' && appData){
-    updateSummary();
-    renderAllocation();
-  }
+  if(tab==='portfolio' && appData){ updateSummary(); renderAllocation(); }
 }
 
 /* ════════════════════════════════════════════
@@ -684,13 +681,9 @@ async function loadData(){
 
 function showApp(){
   document.getElementById('loading-wrap').style.display='none';
-  // Activate the correct tab (from URL hash or default themes)
   const hash = location.hash.replace('#','');
-  const tab = (hash==='portfolio')?'portfolio':'themes';
-  document.getElementById('tab-'+tab).classList.add('active');
-  document.body.dataset.tab = tab;
-  document.getElementById('btn-'+tab).classList.add('active');
-  if(tab!=='themes') document.getElementById('btn-themes').classList.remove('active');
+  const tab = (hash==='portfolio') ? 'portfolio' : 'themes';
+  switchTab(tab);
   renderAll();
 }
 
