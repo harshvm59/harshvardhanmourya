@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Harsha's AI Intelligence Terminal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#07070f;
+  --bg-card:#0d0d1a;
+  --bg-card2:#111122;
+  --gold:#FFD700;
+  --blue:#00D4FF;
+  --green:#00FF88;
+  --red:#FF3366;
+  --amber:#FFB020;
+  --text:#e8e8f0;
+  --text2:#9090a8;
+  --border:rgba(255,215,0,0.12);
+  --font-h:'Playfair Display',serif;
+  --font-d:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  background-image:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(255,255,255,0.018) 2px,rgba(255,255,255,0.018) 4px);
+  color:var(--text);
+  font-family:var(--font-d);
+  font-size:14px;
+  min-height:100vh;
+}
+a{color:inherit;text-decoration:none}
+button{cursor:pointer;border:none;background:none;font-family:var(--font-d);color:var(--text)}
+.num{font-variant-numeric:tabular-nums}
+
+/* ── HEADER ── */
+header{
+  position:sticky;top:0;z-index:100;
+  height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;
+  background:rgba(7,7,15,0.95);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+}
+.logo{font-family:var(--font-h);font-size:1.05rem;font-weight:700;color:var(--gold);letter-spacing:.5px;white-space:nowrap}
+.live-badge{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2)}
+.pulse{width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 2s ease infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(0,255,136,.6)}50%{box-shadow:0 0 0 6px rgba(0,255,136,0)}}
+nav{display:flex;align-items:center;gap:20px}
+nav a{font-size:12px;color:var(--text2);transition:.2s}
+nav a.active{color:var(--gold);border-bottom:2px solid var(--gold);padding-bottom:2px}
+nav a:hover{color:var(--text)}
+.refresh-btn{
+  display:flex;align-items:center;gap:6px;padding:6px 12px;
+  border:1px solid var(--border);border-radius:6px;font-size:11px;color:var(--text2);
+  transition:.2s;background:transparent;
+}
+.refresh-btn:hover{border-color:var(--gold);color:var(--gold)}
+
+/* ── MARKET PULSE ── */
+.market-strip{
+  display:flex;align-items:center;gap:24px;padding:10px 24px;
+  background:rgba(255,215,0,0.04);border-bottom:1px solid var(--border);
+  font-size:12px;overflow-x:auto;
+}
+.market-item{display:flex;align-items:center;gap:6px;white-space:nowrap}
+.market-label{color:var(--text2)}
+.up{color:var(--green)}.down{color:var(--red)}.neutral{color:var(--text2)}
+
+/* ── HERO STATS ── */
+.container{max-width:1400px;margin:0 auto;padding:0 20px}
+.hero-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;padding:24px 20px}
+@media(max-width:900px){.hero-stats{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:500px){.hero-stats{grid-template-columns:1fr}}
+.stat-card{
+  background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:20px;
+  position:relative;overflow:hidden;
+  transition:border-color .2s,box-shadow .2s;
+}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold),transparent)}
+.stat-card:hover{border-color:rgba(255,215,0,.35);box-shadow:0 0 24px rgba(255,215,0,.08)}
+.stat-label{font-size:10px;color:var(--text2);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px}
+.stat-value{font-size:1.9rem;font-weight:700;color:var(--gold);font-family:var(--font-h);line-height:1.1}
+.stat-sub{font-size:11px;color:var(--text2);margin-top:6px}
+
+/* ── SORT BAR ── */
+.sort-bar{
+  display:flex;align-items:center;gap:12px;padding:16px 20px;flex-wrap:wrap;
+}
+.sort-label{font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:1px}
+.sort-btn{
+  padding:6px 14px;border-radius:20px;font-size:11px;
+  border:1px solid var(--border);color:var(--text2);transition:.2s;background:transparent;
+}
+.sort-btn.active,.sort-btn:hover{background:var(--gold);color:#000;border-color:var(--gold);font-weight:700}
+
+/* ── LOADING ── */
+.loading{padding:60px 20px;text-align:center;color:var(--text2);font-size:13px}
+.skeleton{background:linear-gradient(90deg,#1a1a2e 25%,#222240 50%,#1a1a2e 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;border-radius:8px;height:200px;margin:12px 20px}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.error-banner{
+  margin:20px;padding:20px;background:rgba(255,51,102,.08);border:1px solid rgba(255,51,102,.3);
+  border-radius:10px;color:var(--red);text-align:center;line-height:1.8;font-size:13px;
+}
+
+/* ── THEME GRID ── */
+.themes-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;padding:0 20px 20px}
+@media(max-width:768px){.themes-grid{grid-template-columns:1fr}}
+
+/* ── THEME CARD ── */
+.theme-card{
+  background:var(--bg-card);border:1px solid var(--border);border-radius:14px;
+  overflow:hidden;transition:border-color .25s,box-shadow .25s;
+  position:relative;
+}
+.theme-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold),rgba(255,215,0,.2))}
+.theme-card:hover{border-color:rgba(255,215,0,.3);box-shadow:0 4px 32px rgba(255,215,0,.07)}
+.card-body{padding:18px}
+
+/* card top row */
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px}
+.card-icon-name{display:flex;align-items:center;gap:10px}
+.card-icon{font-size:1.5rem}
+.card-name{font-family:var(--font-h);font-size:1.05rem;font-weight:600;line-height:1.2;color:var(--text)}
+.trend-badge{
+  flex-shrink:0;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.8px;white-space:nowrap;
+}
+.trend-RISING{background:rgba(0,255,136,.12);color:var(--green);border:1px solid rgba(0,255,136,.3)}
+.trend-PEAK{background:rgba(255,215,0,.12);color:var(--gold);border:1px solid rgba(255,215,0,.3)}
+.trend-EMERGING{background:rgba(0,212,255,.12);color:var(--blue);border:1px solid rgba(0,212,255,.3)}
+.trend-COOLING{background:rgba(255,51,102,.12);color:var(--red);border:1px solid rgba(255,51,102,.3)}
+
+/* market size bars */
+.market-section{margin-bottom:14px}
+.section-label{font-size:10px;color:var(--text2);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+.size-bars{display:flex;align-items:flex-end;gap:6px;height:44px}
+.size-bar-wrap{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1}
+.size-bar{width:100%;border-radius:3px 3px 0 0;min-height:4px;transition:height .4s ease}
+.size-year{font-size:9px;color:var(--text2)}
+.size-values{font-size:10px;color:var(--text2);margin-top:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* upside */
+.upside-row{display:flex;align-items:baseline;gap:8px;margin-bottom:14px}
+.upside-val{font-size:2rem;font-weight:700;color:var(--gold);font-variant-numeric:tabular-nums}
+.upside-label{font-size:11px;color:var(--text2)}
+
+/* buzz + sentiment */
+.buzz-row{margin-bottom:10px}
+.buzz-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;font-size:11px}
+.buzz-label{color:var(--text2)}
+.buzz-score-label{font-weight:600}
+.buzz-bar-track{height:6px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden}
+.buzz-bar-fill{height:100%;border-radius:3px;transition:width .6s ease}
+.buzz-high .buzz-bar-fill{background:var(--green)}
+.buzz-mid .buzz-bar-fill{background:var(--amber)}
+.buzz-low .buzz-bar-fill{background:rgba(255,51,102,.7)}
+.sentiment-pill{
+  display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;margin-top:6px;
+}
+.sent-BULLISH{background:rgba(0,255,136,.12);color:var(--green);border:1px solid rgba(0,255,136,.3)}
+.sent-BEARISH{background:rgba(255,51,102,.12);color:var(--red);border:1px solid rgba(255,51,102,.3)}
+.sent-NEUTRAL{background:rgba(144,144,168,.1);color:var(--text2);border:1px solid rgba(144,144,168,.2)}
+
+/* exposure */
+.exposure-row{
+  padding:8px 10px;border-radius:8px;font-size:11px;margin-bottom:10px;
+}
+.exposure-owned{background:rgba(0,255,136,.06);border:1px solid rgba(0,255,136,.2);color:var(--green)}
+.exposure-none{background:rgba(255,176,32,.06);border:1px solid rgba(255,176,32,.2);color:var(--amber)}
+.exposure-partial{background:rgba(0,212,255,.06);border:1px solid rgba(0,212,255,.2);color:var(--blue)}
+.missing-tickers{color:var(--amber);font-size:10px;margin-top:4px}
+
+/* 1d change + voices */
+.meta-row{display:flex;align-items:center;justify-content:space-between;font-size:11px;color:var(--text2);margin-bottom:12px;flex-wrap:wrap;gap:6px}
+.change-1d{font-weight:600}
+
+/* expand btn */
+.expand-btn{
+  width:100%;padding:9px;text-align:center;font-size:11px;color:var(--text2);
+  border-top:1px solid var(--border);cursor:pointer;transition:.2s;background:transparent;
+  font-family:var(--font-d);
+}
+.expand-btn:hover{color:var(--gold);background:rgba(255,215,0,.04)}
+
+/* video cards */
+.videos-section{border-top:1px solid var(--border);padding:16px;display:none}
+.videos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.video-card{
+  background:var(--bg-card2);border:1px solid rgba(255,255,255,.06);border-radius:10px;overflow:hidden;
+  transition:border-color .2s;cursor:pointer;
+}
+.video-card:hover{border-color:rgba(0,212,255,.3)}
+.video-thumb{width:100%;aspect-ratio:16/9;object-fit:cover;background:#1a1a2e}
+.video-info{padding:10px}
+.video-title{font-size:11px;color:var(--text);line-height:1.4;margin-bottom:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.video-meta{font-size:10px;color:var(--text2);display:flex;justify-content:space-between}
+
+/* ── KEY VOICES SECTION ── */
+.section-header{padding:28px 20px 16px;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.section-title{font-family:var(--font-h);font-size:1.5rem;font-weight:700;color:var(--text)}
+.section-sub{font-size:12px;color:var(--text2)}
+.voices-scroll{overflow-x:auto;padding:0 20px 20px;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
+.voices-row{display:flex;gap:16px;width:max-content;padding-bottom:4px}
+.voice-card{
+  width:240px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;
+  overflow:hidden;transition:border-color .2s,box-shadow .2s;flex-shrink:0;
+}
+.voice-card:hover{border-color:rgba(0,212,255,.35);box-shadow:0 4px 20px rgba(0,212,255,.08)}
+.voice-thumb{width:100%;aspect-ratio:16/9;object-fit:cover;background:#1a1a2e}
+.voice-info{padding:12px}
+.voice-title{font-size:11px;color:var(--text);line-height:1.4;margin-bottom:8px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.voice-bottom{display:flex;align-items:center;justify-content:space-between;font-size:10px;color:var(--text2)}
+.watch-link{color:var(--blue);font-weight:600;transition:.2s}
+.watch-link:hover{color:var(--gold)}
+.voice-channel{color:var(--text2)}
+
+/* ── FOOTER ── */
+footer{
+  padding:24px;text-align:center;font-size:11px;color:var(--text2);
+  border-top:1px solid var(--border);
+}
+footer a{color:var(--gold);text-decoration:underline}
+
+/* ── SCROLL ── */
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(255,215,0,.2);border-radius:3px}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">⚡ HARSHA'S AI INTELLIGENCE TERMINAL</div>
+  <div class="live-badge">
+    <div class="pulse"></div>
+    <span>LIVE · Updated <span id="updated-time">—</span></span>
+  </div>
+  <nav>
+    <a href="index.html" class="active">THEMES</a>
+    <a href="portfolio.html">PORTFOLIO →</a>
+    <button class="refresh-btn" onclick="location.reload()">🔄 Refresh</button>
+  </nav>
+</header>
+
+<!-- MARKET PULSE -->
+<div class="market-strip" id="market-strip">
+  <div class="market-item"><span class="market-label">S&P 500</span><span id="sp500" class="neutral">—</span></div>
+  <div class="market-item"><span class="market-label">NASDAQ</span><span id="nasdaq" class="neutral">—</span></div>
+  <div class="market-item"><span class="market-label">VIX</span><span id="vix" class="neutral">—</span></div>
+  <div style="margin-left:auto;font-size:11px;color:var(--text2);white-space:nowrap">Auto-updated daily 7:00 AM IST</div>
+</div>
+
+<!-- HERO STATS -->
+<div class="hero-stats">
+  <div class="stat-card">
+    <div class="stat-label">Total AI TAM 2030</div>
+    <div class="stat-value num" id="total-tam">—</div>
+    <div class="stat-sub">Sum of all 12 theme markets</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Hottest Theme 🔥</div>
+    <div class="stat-value" id="hottest-theme" style="font-size:1.1rem;line-height:1.3">—</div>
+    <div class="stat-sub" id="hottest-score">Buzz score</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">My Coverage</div>
+    <div class="stat-value num" id="my-coverage">—</div>
+    <div class="stat-sub" id="coverage-sub">of 12 AI themes</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Avg Upside (My Themes)</div>
+    <div class="stat-value num" id="avg-upside">—</div>
+    <div class="stat-sub">Potential return by 2030</div>
+  </div>
+</div>
+
+<!-- SORT BAR -->
+<div class="sort-bar">
+  <span class="sort-label">Sort by:</span>
+  <button class="sort-btn active" data-sort="buzz" onclick="setSort(this,'buzz')">🔥 Buzz</button>
+  <button class="sort-btn" data-sort="upside" onclick="setSort(this,'upside')">📈 Upside</button>
+  <button class="sort-btn" data-sort="market" onclick="setSort(this,'market')">💰 Market Size</button>
+  <button class="sort-btn" data-sort="coverage" onclick="setSort(this,'coverage')">✅ My Coverage</button>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="loading">
+  <div class="skeleton"></div>
+  <div class="skeleton" style="height:160px;margin-top:0"></div>
+</div>
+<div id="error-msg" style="display:none">
+  <div class="error-banner">
+    ⚠️ Could not load <code>data/data.json</code><br>
+    Run <code>python3 fetch_data.py --skip-youtube</code> to generate data, then refresh this page.
+  </div>
+</div>
+
+<div id="themes-grid" class="themes-grid" style="display:none"></div>
+
+<!-- KEY VOICES -->
+<div id="voices-section" style="display:none">
+  <div class="section-header">
+    <span class="section-title">What the Smart Money Is Saying</span>
+    <span class="section-sub">Top videos from key AI investment voices this week</span>
+  </div>
+  <div class="voices-scroll">
+    <div class="voices-row" id="voices-row"></div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  Auto-updated daily at 7:00 AM IST · Built by Harsha ·
+  <a href="https://harshvm59.github.io/harshvardhanmourya/" target="_blank">harshvardhanmourya.github.io</a>
+</footer>
+
+<script>
+const PORTFOLIO = ["NVDA","TSLA","META","TSM","GOOGL","PLTR","CRWD","AMD","MU","AVGO","VRT","ASML","CEG","ANET","MSFT","AMZN"];
+let appData = null;
+let currentSort = 'buzz';
+
+// ── UTILS ──
+function fmt$(n){return '$'+(+n).toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0})}
+function fmtB(n){
+  if(n>=1000)return'$'+(n/1000).toFixed(1)+'T';
+  if(n>=1)return'$'+n.toFixed(0)+'B';
+  return'$'+(n*1000).toFixed(0)+'M';
+}
+function fmtViews(n){
+  if(n>=1000000)return(n/1000000).toFixed(1)+'M';
+  if(n>=1000)return(n/1000).toFixed(0)+'K';
+  return n;
+}
+function sign(n){return n>=0?'+':'';}
+function chgClass(n){return n>0?'up':n<0?'down':'neutral'}
+function daysAgo(str){
+  const d=new Date(str),now=new Date();
+  return Math.floor((now-d)/(1000*60*60*24));
+}
+
+// ── FETCH DATA ──
+async function loadData(){
+  try{
+    const r=await fetch('./data/data.json?v='+Date.now());
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    appData=await r.json();
+    document.getElementById('loading').style.display='none';
+    render();
+  }catch(e){
+    document.getElementById('loading').style.display='none';
+    document.getElementById('error-msg').style.display='block';
+    console.error('Failed to load data.json:',e);
+  }
+}
+
+// ── MARKET ──
+function renderMarket(){
+  const m=appData.market_summary;
+  const sp=m.sp500_change,nq=m.nasdaq_change,vx=m.vix;
+  const dir=n=>n>0?'▲':n<0?'▼':'';
+  document.getElementById('sp500').className=chgClass(sp);
+  document.getElementById('sp500').textContent=`${dir(sp)}${Math.abs(sp).toFixed(2)}%`;
+  document.getElementById('nasdaq').className=chgClass(nq);
+  document.getElementById('nasdaq').textContent=`${dir(nq)}${Math.abs(nq).toFixed(2)}%`;
+  document.getElementById('vix').className=vx<20?'up':vx>30?'down':'neutral';
+  document.getElementById('vix').textContent=`${vx.toFixed(1)} ${vx<18?'↓':'↑'}`;
+  const ts=appData.last_updated;
+  document.getElementById('updated-time').textContent=ts?new Date(ts).toLocaleString('en-IN',{dateStyle:'short',timeStyle:'short'}):ts;
+}
+
+// ── HERO STATS ──
+function renderHero(){
+  const themes=appData.themes;
+  // TAM
+  const tam=themes.reduce((s,t)=>s+(t.market_size['2030e']||0),0);
+  document.getElementById('total-tam').textContent=fmtB(tam);
+
+  // Hottest
+  const sorted=[...themes].sort((a,b)=>b.youtube_buzz_score-a.youtube_buzz_score);
+  const hot=sorted[0];
+  document.getElementById('hottest-theme').textContent=hot.icon+' '+hot.name;
+  document.getElementById('hottest-score').textContent=`🔥 ${hot.youtube_buzz_score}/100 buzz score`;
+
+  // Coverage
+  const covered=themes.filter(t=>t.my_stocks&&t.my_stocks.length>0).length;
+  document.getElementById('my-coverage').textContent=`${covered} of 12`;
+  const pct=Math.round(covered/12*100);
+  document.getElementById('coverage-sub').style.color=pct>=80?'var(--green)':pct>=50?'var(--amber)':'var(--red)';
+
+  // Avg upside
+  const myThemes=themes.filter(t=>t.my_stocks&&t.my_stocks.length>0);
+  const avgUp=(myThemes.reduce((s,t)=>s+t.upside_multiplier,0)/myThemes.length).toFixed(1);
+  document.getElementById('avg-upside').textContent=avgUp+'x';
+}
+
+// ── SORT ──
+function setSort(btn,key){
+  document.querySelectorAll('.sort-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  currentSort=key;
+  renderThemes();
+}
+
+function sortThemes(themes){
+  const t=[...themes];
+  if(currentSort==='buzz')t.sort((a,b)=>b.youtube_buzz_score-a.youtube_buzz_score);
+  else if(currentSort==='upside')t.sort((a,b)=>b.upside_multiplier-a.upside_multiplier);
+  else if(currentSort==='market')t.sort((a,b)=>(b.market_size['2030e']||0)-(a.market_size['2030e']||0));
+  else if(currentSort==='coverage'){
+    t.sort((a,b)=>{
+      const aHas=a.my_stocks&&a.my_stocks.length>0?1:0;
+      const bHas=b.my_stocks&&b.my_stocks.length>0?1:0;
+      return bHas-aHas||(b.youtube_buzz_score-a.youtube_buzz_score);
+    });
+  }
+  return t;
+}
+
+// ── THEMES ──
+function renderThemes(){
+  const grid=document.getElementById('themes-grid');
+  grid.style.display='grid';
+  const themes=sortThemes(appData.themes);
+  grid.innerHTML=themes.map(t=>buildThemeCard(t)).join('');
+}
+
+function buildThemeCard(t){
+  // Market size bars
+  const sizes=[t.market_size['2020'],t.market_size['2023'],t.market_size['2026e'],t.market_size['2030e']];
+  const labels=['2020','2023','2026e','2030e'];
+  const maxS=Math.max(...sizes);
+  const barColors=['rgba(255,215,0,0.2)','rgba(255,215,0,0.4)','rgba(255,215,0,0.65)','rgba(255,215,0,0.95)'];
+  const bars=sizes.map((s,i)=>`
+    <div class="size-bar-wrap">
+      <div class="size-bar" style="height:${Math.max(8,Math.round(s/maxS*40))}px;background:${barColors[i]}"></div>
+      <div class="size-year">${labels[i]}</div>
+    </div>`).join('');
+
+  // Buzz
+  const buzz=t.youtube_buzz_score||0;
+  const buzzClass=buzz>=60?'buzz-high':buzz>=30?'buzz-mid':'buzz-low';
+  const buzzEmoji=buzz>=60?'🔥':buzz>=30?'📈':'💤';
+  const buzzText=buzz>=60?'High Buzz':buzz>=30?'Rising':'Low';
+
+  // Exposure
+  const myStocks=t.my_stocks||[];
+  const allStocks=t.top_stocks||[];
+  const missing=allStocks.filter(s=>!myStocks.includes(s));
+  let exposureHtml='';
+  if(myStocks.length===allStocks.length){
+    exposureHtml=`<div class="exposure-row exposure-owned">✅ FULLY COVERED: ${myStocks.join(', ')}</div>`;
+  }else if(myStocks.length>0){
+    exposureHtml=`<div class="exposure-row exposure-partial">
+      ✅ YOU OWN: ${myStocks.join(', ')}
+      <div class="missing-tickers">⚠️ Missing: ${missing.join(', ')}</div>
+    </div>`;
+  }else{
+    exposureHtml=`<div class="exposure-row exposure-none">
+      ⚠️ NOT INVESTED IN THIS THEME
+      <div class="missing-tickers">Consider: ${allStocks.slice(0,3).join(', ')}</div>
+    </div>`;
+  }
+
+  // 1d change
+  const c1d=t.theme_1d_change||0;
+  const changeStr=`${c1d>=0?'▲':'▼'}${Math.abs(c1d).toFixed(2)}%`;
+
+  // Videos
+  const videos=(t.youtube_videos||[]).slice(0,8);
+  const videosHtml=videos.length?`
+    <div class="videos-grid">${videos.map(v=>`
+      <a href="${v.url||'#'}" target="_blank" class="video-card">
+        <img class="video-thumb" src="${v.thumbnail||''}" alt="" loading="lazy" onerror="this.style.display='none'">
+        <div class="video-info">
+          <div class="video-title">${v.title||''}</div>
+          <div class="video-meta">
+            <span>${v.channelTitle||''}</span>
+            <span>${fmtViews(v.viewCount||0)} views</span>
+          </div>
+          <div class="video-meta" style="margin-top:3px">
+            <span>${v.days_ago!=null?v.days_ago+'d ago':''}</span>
+          </div>
+        </div>
+      </a>`).join('')}
+    </div>`:'<div style="color:var(--text2);font-size:12px;text-align:center;padding:12px">Run fetch_data.py to load YouTube data</div>';
+
+  return `
+  <div class="theme-card" id="theme-${t.id}">
+    <div class="card-body">
+      <div class="card-top">
+        <div class="card-icon-name">
+          <span class="card-icon">${t.icon}</span>
+          <span class="card-name">${t.name}</span>
+        </div>
+        <span class="trend-badge trend-${t.relevance_trend}">${t.relevance_trend}</span>
+      </div>
+
+      <div class="market-section">
+        <div class="section-label">Market Size Journey</div>
+        <div class="size-bars">${bars}</div>
+        <div class="size-values num">${sizes.map(s=>fmtB(s)).join(' → ')}</div>
+      </div>
+
+      <div class="upside-row">
+        <span class="upside-val num">${t.upside_multiplier}x</span>
+        <span class="upside-label">potential by 2030</span>
+      </div>
+
+      <div class="buzz-row ${buzzClass}">
+        <div class="buzz-header">
+          <span class="buzz-label">${buzzEmoji} YouTube Buzz</span>
+          <span class="buzz-score-label" style="color:${buzz>=60?'var(--green)':buzz>=30?'var(--amber)':'var(--red)'}">${buzzText} ${buzz}/100</span>
+        </div>
+        <div class="buzz-bar-track"><div class="buzz-bar-fill" style="width:${buzz}%"></div></div>
+        <span class="sentiment-pill sent-${t.sentiment_label}">${t.sentiment_label}</span>
+      </div>
+
+      ${exposureHtml}
+
+      <div class="meta-row">
+        <span>💬 ${(t.key_voices||[]).join(' · ')}</span>
+        <span class="change-1d ${chgClass(c1d)}">Theme Today: ${changeStr}</span>
+      </div>
+    </div>
+    <button class="expand-btn" onclick="toggleVideos(${t.id},this)">▼ Show ${videos.length} Videos</button>
+    <div class="videos-section" id="videos-${t.id}">${videosHtml}</div>
+  </div>`;
+}
+
+function toggleVideos(id,btn){
+  const sec=document.getElementById('videos-'+id);
+  const open=sec.style.display==='block';
+  sec.style.display=open?'none':'block';
+  const count=sec.querySelectorAll('.video-card').length||0;
+  btn.textContent=open?`▼ Show ${count} Videos`:`▲ Hide Videos`;
+}
+
+// ── VOICES ──
+function renderVoices(){
+  const videos=appData.key_voice_videos||[];
+  if(!videos.length)return;
+  document.getElementById('voices-section').style.display='block';
+  const row=document.getElementById('voices-row');
+  row.innerHTML=videos.slice(0,10).map(v=>`
+    <div class="voice-card">
+      <img class="voice-thumb" src="${v.thumbnail||''}" alt="" loading="lazy" onerror="this.style.display='none'">
+      <div class="voice-info">
+        <div class="voice-title">${(v.title||'').substring(0,80)}${(v.title||'').length>80?'…':''}</div>
+        <div class="voice-bottom">
+          <span class="voice-channel">${v.channelTitle||''} · ${fmtViews(v.viewCount||0)} views</span>
+          <a class="watch-link" href="${v.url||'#'}" target="_blank">Watch →</a>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+// ── RENDER ALL ──
+function render(){
+  renderMarket();
+  renderHero();
+  renderThemes();
+  renderVoices();
+}
+
+loadData();
+</script>
+</body>
+</html>
