@@ -731,7 +731,7 @@ function switchTab(tab){
     document.getElementById('tab-'+t).classList.toggle('active', t===tab);
     document.getElementById('btn-'+t).classList.toggle('active', t===tab);
   });
-  history.replaceState(null,'','#'+tab);
+  try{ history.replaceState(null,'','#'+tab); }catch(e){}
   if(tab==='portfolio' && appData){ updateSummary(); renderAllocation(); }
 }
 
